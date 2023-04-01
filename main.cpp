@@ -244,7 +244,7 @@ public:
 };
 
 int main() {
-    Entity pixie("Pixie", 3, 50, 34, 4, 7, 3, 6, 4);
+    Entity pixie("Pixie", 3, 50, 34, 100, 4, 7, 3, 6, 4);
     cout << pixie;
     return 0;
 }
