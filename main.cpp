@@ -238,7 +238,7 @@ public:
         if(s.type == 0)
             attack = strength;
         else
-            attack = ;
+            attack = dexterity;
         int damage_dealt = s.base_damage * ((float)(attack) / (float)(enemy.vitality));
     }*/
 };
