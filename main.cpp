@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <cstdlib>
 
 using namespace std;
 
-string Types[8] = {"Physical", "Fire", "Ice", "Force", "Electricity", "Light", "Dark", "Almighty"};
-string Stats[7] = {"HP", "MP", "Strength", "Dexterity", "Vitality", "Agility", "Luck"};
+const vector <string> Types = {"Physical", "Pierce", "Projectile", "Fire", "Water", "Electricity", "Earth", "Wind"};
+const vector <string> Stats = {"HP", "MP", "Strength", "Dexterity", "Vitality", "Agility", "Luck"};
 
 class Skill{
     string name;
@@ -46,11 +48,11 @@ public:
     }
 
     //gets
-    int get_type(){return type;}
-    int get_damage(){return base_damage;}
-    int get_MP_cost(){return MP_cost;}
-    float get_hit_rate(){return hit_rate;}
-    float get_critical_rate(){return critical_rate;}
+    const int get_type(){return type;}
+    const int get_damage(){return base_damage;}
+    const int get_MP_cost(){return MP_cost;}
+    const float get_hit_rate(){return hit_rate;}
+    const float get_critical_rate(){return critical_rate;}
 
     //sets
     void set_name(string x){name=x;}
@@ -81,8 +83,8 @@ public:
     }
 
     //gets
-    int get_type(){return type_buff;}
-    float get_buff(){return buff_percentage;}
+    const int get_type(){return type_buff;}
+    const float get_buff(){return buff_percentage;}
 
     //sets
     void set_name(string x){name=x;}
@@ -123,13 +125,13 @@ public:
     }
 
     //gets
-    int get_bHP(){return bonus_HP;}
-    int get_bMP(){return bonus_MP;}
-    int get_bstr(){return bonus_strength;}
-    int get_bdex(){return bonus_dexterity;}
-    int get_bvit(){return bonus_vitality;}
-    int get_bagi(){return bonus_agility;}
-    int get_blck(){return bonus_luck;}
+    const int get_bHP(){return bonus_HP;}
+    const int get_bMP(){return bonus_MP;}
+    const int get_bstr(){return bonus_strength;}
+    const int get_bdex(){return bonus_dexterity;}
+    const int get_bvit(){return bonus_vitality;}
+    const int get_bagi(){return bonus_agility;}
+    const int get_blck(){return bonus_luck;}
 
     //sets
     void set_name(string x){name=x;}
@@ -166,8 +168,8 @@ public:
     }
 
     //gets
-    int get_HP_heal(){return HP_heal;}
-    int get_MP_heal(){return MP_heal;}
+    const int get_HP_heal(){return HP_heal;}
+    const int get_MP_heal(){return MP_heal;}
 
     //sets
     void set_name(string x){name=x;}
@@ -177,22 +179,20 @@ public:
 
 class Entity{
     string name;
-    int nr_skills;
-    Skill skill_list[8];
+    vector <Skill> skill_list;
     int level, HP, MP, macca, strength, dexterity, vitality, agility, luck;
     int current_HP, current_MP;
     int weakness_chart[8];
     Accessory accessory;
     Armour armour;
     int nr_items;
-    Consumable inventory[20];
+    vector <Consumable> inventory;
 public:
     //constructor
     Entity(const string _name = "Demon", const int _level = 1, const int _HP = 100, const int _MP = 30, const int _macca = 0, const int _strength = 3, const int _dexterity = 3, const int _vitality = 3, const int _agility = 3, const int _luck = 3): name(_name), level(_level), HP(_HP), MP(_MP), macca(_macca), strength(_strength), dexterity(_dexterity), vitality(_vitality), agility(_agility), luck(_luck)
     {
         current_HP = HP;
         current_MP = MP;
-        nr_skills = 0;
         nr_items = 0;
         for(int i = 0; i <= 7; i++)
             weakness_chart[i] = 0;
@@ -208,8 +208,8 @@ public:
         out << e.name << '\n' << "Level " << e.level << '\n';
         out << "HP: " << e.current_HP << '/' << e.HP << " MP: "<< e.current_MP << '/' << e.MP << '\n';
         out << "Strength: " << e.strength << " Dexterity: " << e.dexterity << " Vitality: " << e.vitality << " Agility: "<< e.agility << " Luck: " << e.luck << '\n';
-        out << "Number of skills: " << e.nr_skills << '\n';
-        for(int i = 0; i < e.nr_skills; i++)
+        out << "Number of skills: " << e.skill_list.size() << '\n';
+        for(int i = 0; i < e.skill_list.size(); i++)
             out << e.skill_list[i] << '\n';
         for(int i = 0; i < 8; i++)
         {
@@ -231,20 +231,123 @@ public:
         return out;
     }
 
+    void afisBasicStats(){
+        cout << name << '\n' << "Level " << level << '\n';
+        cout << "HP: " << current_HP << '/' << HP << " MP: "<< current_MP << '/' << MP << '\n';
+    }
+
+    //getters
+    const int get_lvl(){return level;}
+    const int get_HP(){return HP;}
+    const int get_MP(){return MP;}
+    const int get_str(){return strength;}
+    const int get_dex(){return dexterity;}
+    const int get_vit(){return vitality;}
+    const int get_agi(){return agility;}
+    const int get_lck(){return luck;}
+    const int get_weakness(int type){return weakness_chart[type];}
+
     //use skill
-    /*void UseSkill(Skill s, Entity& enemy)
+
+    void takedamage(int damage){current_HP -= damage; current_HP=max(current_HP,0); current_HP=min(current_HP, HP);}
+
+    bool learnSkill(Skill s)
     {
-        int attack = 0;
-        if(s.type == 0)
-            attack = strength;
-        else
-            attack = dexterity;
-        int damage_dealt = s.base_damage * ((float)(attack) / (float)(enemy.vitality));
-    }*/
+        if(skill_list.size() < 4)
+        {
+            skill_list.push_back(s);
+            return true;
+        }
+        return false;
+    }
+
+    void forgetSkill(int i){skill_list.erase(skill_list.begin()+i);}
+
+    void equip_armour(Armour a)
+    {
+        HP += (a.get_bHP()-armour.get_bHP());
+        MP += (a.get_bMP()-armour.get_bMP());
+        strength += (a.get_bstr()-armour.get_bstr());
+        dexterity += (a.get_bdex()-armour.get_bdex());
+        vitality += (a.get_bvit()-armour.get_bvit());
+        agility += (a.get_bagi()-armour.get_bagi());
+        luck += (a.get_blck()-armour.get_blck());
+        armour = a;
+    }
+
+    void equip_accesory(Accessory a){accessory = a;}
+
+    bool UseSkill(Skill s, Entity& enemy)
+    {
+        current_MP -= s.get_MP_cost();
+        float hitr = s.get_hit_rate() * (agility / enemy.get_agi());
+        int r = rand() % 1000, type = s.get_type(), weak = enemy.get_weakness(type);
+        if(r >= hitr*1000 || weak == 2)
+            return false;
+        if(r < hitr*1000) {
+            int attack = 0;
+            if (type == 0)
+                attack = strength;
+            else if (type < 3)
+                attack = (strength + dexterity) / 2;
+            else
+                attack = dexterity;
+            float dmg = s.get_damage() * attack * min((float)(1), (float)(1+(float)(level)/100));
+            if(accessory.get_type() == type)
+                dmg *= accessory.get_buff();
+            r = rand() % 1000;
+            hitr = s.get_critical_rate() * (luck / enemy.get_lck());
+            bool extraTurn = false;
+            if(r < hitr*1000) {
+                dmg *= 1.2;
+                extraTurn = true;
+            }
+            if(weak == -1){
+                dmg *= 1.2;
+                extraTurn = true;
+            }
+            else if(weak == 1)
+                dmg *= 0.8;
+            else if(weak == 4) {
+                dmg *= -0.5;
+                extraTurn = false;
+            }
+            if(weak != 3) {
+                dmg /= enemy.get_vit();
+                enemy.takedamage(dmg);
+            }
+            else{
+                extraTurn = false;
+                dmg /= enemy.get_vit();
+                if(weakness_chart[type]==-1)
+                    dmg *= 1.2;
+                else if(weakness_chart[type]==1)
+                    dmg *= 0.8;
+                else if(weakness_chart[type]==4)
+                    dmg *= -0.5;
+                else if(weakness_chart[type]>2)
+                    dmg = 0;
+                takedamage(dmg);
+            }
+            return extraTurn;
+        }
+    }
+};
+
+class Battle{
+    Entity player, enemy;
 };
 
 int main() {
+    srand(time(0));
     Entity pixie("Pixie", 3, 50, 34, 100, 4, 7, 3, 6, 4);
-    cout << pixie;
+    cout << pixie << '\n';
+    Skill agi("Agi", 3, 20, 8, 1, 0.2);
+    cout << pixie.learnSkill(agi) << '\n';
+    Entity pixie2 = pixie;
+    cout << pixie.UseSkill(agi, pixie2) << '\n';
+    pixie.afisBasicStats();
+    cout << '\n';
+    pixie2.afisBasicStats();
     return 0;
 }
