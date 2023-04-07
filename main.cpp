@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -47,21 +48,13 @@ public:
         critical_rate = other.critical_rate;
     }
 
-    //gets
+    //geterts
     const string get_name(){return name;}
     const int get_type(){return type;}
     const int get_damage(){return base_damage;}
     const int get_MP_cost(){return MP_cost;}
     const float get_hit_rate(){return hit_rate;}
     const float get_critical_rate(){return critical_rate;}
-
-    //sets
-    void set_name(string x){name=x;}
-    void set_type(int x){type=x;}
-    void set_damage(int x){base_damage=x;}
-    void set_MP_cost(int x){MP_cost=x;}
-    void set_hit_rate(float x){hit_rate=x;}
-    void set_critical_rate(float x){critical_rate=x;}
 };
 
 class Accessory{
@@ -83,14 +76,9 @@ public:
         return out << a.name << '\n' << Types[a.type_buff] << " buffed by " << a.buff_percentage << '%';
     }
 
-    //gets
+    //getters
     const int get_type(){return type_buff;}
     const float get_buff(){return buff_percentage;}
-
-    //sets
-    void set_name(string x){name=x;}
-    void set_type(int x){type_buff=x;}
-    void set_buff(float x){buff_percentage=x;}
 };
 
 class Armour{
@@ -125,7 +113,7 @@ public:
         return out;
     }
 
-    //gets
+    //getters
     const int get_bHP(){return bonus_HP;}
     const int get_bMP(){return bonus_MP;}
     const int get_bstr(){return bonus_strength;}
@@ -134,15 +122,6 @@ public:
     const int get_bagi(){return bonus_agility;}
     const int get_blck(){return bonus_luck;}
 
-    //sets
-    void set_name(string x){name=x;}
-    void get_bHP(int x){bonus_HP=x;}
-    void get_bMP(int x){bonus_MP=x;}
-    void get_bstr(int x){bonus_strength=x;}
-    void get_bdex(int x){bonus_dexterity=x;}
-    void get_bvit(int x){bonus_vitality=x;}
-    void get_bagi(int x){bonus_agility=x;}
-    void get_blck(int x){bonus_luck=x;}
 };
 
 class Consumable{
@@ -168,22 +147,17 @@ public:
         return out;
     }
 
-    //gets
+    //getters
     const string get_name(){return name;}
     const int get_HP_heal(){return HP_heal;}
     const int get_MP_heal(){return MP_heal;}
-
-    //sets
-    void set_name(string x){name=x;}
-    void set_HP_heal(int x){HP_heal=x;}
-    void set_MP_heal(int x){MP_heal=x;}
 };
 
 class Entity{
     string name;
     vector <Skill> skill_list;
     int level, HP, MP, macca, strength, dexterity, vitality, agility, luck;
-    int current_HP, current_MP;
+    int current_HP, current_MP, xp;
     int weakness_chart[8];
     Accessory accessory;
     Armour armour;
@@ -258,7 +232,12 @@ public:
 
     //use skill
 
-    void takedamage(int damage){current_HP -= damage; current_HP=max(current_HP,0); current_HP=min(current_HP, HP);} //entity takes a certain amount of damage
+    void takedamage(int damage){//entity takes a certain amount of damage
+        current_HP -= damage;
+        current_HP=max(current_HP,0);
+        current_HP=min(current_HP, HP);
+        cout << "Dealt "<<damage<<" to "<<name<<".\n";
+    }
 
     bool learnSkill(Skill s) //learn a new skill
     {
@@ -293,10 +272,21 @@ public:
 
     void guardHeal(){current_MP = min(MP, current_MP + MP / 7); current_HP = min(HP, current_HP + HP / 20);} //heal MP and HP if guarding
 
+    void battle_rewards(int macca_gained, int xp_gained){
+        macca += macca_gained;
+        xp += xp_gained;
+        while(xp > 1000)
+        {
+            xp -= 1000;
+            level++;
+        }
+    }
+
     bool UseSkill(Skill s, Entity& enemy, bool guard = false) //an entity uses a certain skill on another entity that may or may not be guarding
     {
         current_MP -= s.get_MP_cost(); //skill uses a certain amount of MP
         float hitr = s.get_hit_rate() * (agility / enemy.get_agi()); //calculating the hir rate, taking agility into account
+        srand(time(0));
         int r = rand() % 1000, type = s.get_type(), weak = enemy.get_weakness(type); //generate a random number that determines if the skill hits and get the type of the move and the enemies weakness to the type
         if(r >= hitr*1000 || weak == 2) //do nothing if move misses or the skill is nulled by the enemy
             return false;
@@ -311,12 +301,14 @@ public:
             float dmg = s.get_damage() * attack * min((float)(1), (float)(1+(float)(level)/100)); //get the base damage of the move taking into account the attack stat and the level
             if(accessory.get_type() == type) //buff the damage if the type is buffed by the accessory
                 dmg *= accessory.get_buff();
+            srand(time(0));
             r = rand() % 1000; //generate a random number that determines if the skill is a critical hit
             hitr = s.get_critical_rate() * (luck / enemy.get_lck());
             bool extraTurn = false; //entity gets an extra turn if the enemy is weak to the skill
             if(guard) //decrease damage if enemy is guarding
                 dmg *= 0.3;
             if(r < hitr*1000) { //increase damage if skill is a critical hit
+                cout << "A critical hit!\n";
                 dmg *= 1.2;
                 extraTurn = true;
             }
@@ -355,9 +347,10 @@ public:
 class Battle{
     Entity player, enemy;
     bool playerGuard = false, enemyGuard = false;
+    int macca_gained, xp_gained;
 
 public:
-    Battle(Entity _player, Entity _enemy): player(_player), enemy(_enemy) {}
+    Battle(Entity _player, Entity _enemy, int _macca_gained = 0, int _xp_gained = 0): player(_player), enemy(_enemy), macca_gained(_macca_gained), xp_gained(_xp_gained) {}
 
     bool playerAction(int action){ //player action
         bool extraTurn = false;
@@ -408,7 +401,7 @@ public:
         int action;
         cin >> action; //choosing an action
         bool extraTurn = playerAction(action);
-        if(extraTurn = true && enemy.get_curHP()) //another action if the player got an extra turn
+        if(extraTurn && enemy.get_curHP()) //another action if the player got an extra turn
         {
             player.afisBasicStats();
             enemy.afisBasicStats();
@@ -420,13 +413,16 @@ public:
 
     void battleTurnEnemy(){ //enemy turn
         enemyGuard = false;
+        srand(time(0));
         int r = rand() % 5; //random chance for fighting or guarding
         if(r == 4) {
+            cout << "Enemy guards.\n";
             enemyGuard = true;
             enemy.guardHeal();
         }
         else
         {
+            srand(time(0));
             r = rand() % enemy.get_nr_skills(); //use random skill
             Skill s = enemy.get_skill(r);
             bool extraTurn = false;
@@ -436,9 +432,13 @@ public:
             {
                 player.afisBasicStats();
                 enemy.afisBasicStats();
+                srand(time(0));
                 r = rand() % 5; //random chance for fighting or guarding
-                if(r == 4)
+                if(r == 4) {
+                    cout << "Enemy guards.\n";
                     enemyGuard = true;
+                    enemy.guardHeal();
+                }
                 else
                 {
                     r = rand() % enemy.get_nr_skills(); //use random skill
@@ -450,7 +450,7 @@ public:
         }
     }
 
-    void battle(){
+    Entity battle(){
         while(player.get_curHP() && enemy.get_curHP())
         {
             player.afisBasicStats(); //show stats
@@ -461,12 +461,14 @@ public:
             if(enemy.get_curHP()) //enemy turn
                 battleTurnEnemy();
         }
+        if(player.get_curHP())
+            player.battle_rewards(macca_gained, xp_gained);
+        return player;
     }
 };
 
 int main() {
-    srand(time(0));
-    Entity pixie("Pixie", 3, 300, 34, 100, 4, 7, 3, 6, 4);
+    Entity pixie("Pixie", 3, 300, 100, 100, 4, 7, 3, 6, 4);
     cout << pixie << '\n';
     Skill agi("Agi", 3, 20, 8, 1, 0.2);
     cout << pixie.learnSkill(agi) << '\n';
@@ -476,6 +478,7 @@ int main() {
     cout << '\n';
     pixie2.afisBasicStats();
     Battle b1(pixie, pixie2);
-    b1.battle();
+    pixie = b1.battle();
+    cout << pixie << '\n';
     return 0;
 }
