@@ -397,7 +397,7 @@ public:
     void battleTurnPlayer(){ //player turn
         playerGuard = false;
         cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
-        int action;
+        int action = 0;
         cin >> action; //choosing an action
         bool extraTurn = playerAction(action);
         if(extraTurn && enemy.get_curHP()) //another action if the player got an extra turn
