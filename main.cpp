@@ -17,7 +17,7 @@ class Skill{
 public:
 
     // constructor
-    Skill(string _name = "", const int _type = 0, const int _base_damage = 0, const int _MP_cost = 0, const float _hit_rate = 1, const float _critical_rate = 0.01): name(_name), type(_type), base_damage(_base_damage), MP_cost(_MP_cost), hit_rate(_hit_rate), critical_rate(_critical_rate){}
+    Skill(const string _name = "", const int _type = 0, const int _base_damage = 0, const int _MP_cost = 0, const float _hit_rate = 1, const float _critical_rate = 0.01): name(_name), type(_type), base_damage(_base_damage), MP_cost(_MP_cost), hit_rate(_hit_rate), critical_rate(_critical_rate){}
 
     //constructor de copiere
     Skill(const Skill & other): name(other.name), type(other.type), base_damage(other.base_damage), MP_cost(other.MP_cost), hit_rate(other.hit_rate), critical_rate(other.critical_rate){}
@@ -38,7 +38,7 @@ public:
     }
 
     //operator de copiere
-    Skill& operator=(const Skill& other)
+    Skill& operator = (const Skill& other)
     {
         name = other.name;
         type = other.type;
@@ -46,15 +46,16 @@ public:
         MP_cost = other.MP_cost;
         hit_rate = other.hit_rate;
         critical_rate = other.critical_rate;
+        return *this;
     }
 
     //geterts
-    const string get_name(){return name;}
-    const int get_type(){return type;}
-    const int get_damage(){return base_damage;}
-    const int get_MP_cost(){return MP_cost;}
-    const float get_hit_rate(){return hit_rate;}
-    const float get_critical_rate(){return critical_rate;}
+    string get_name() const{return name;}
+    int get_type() const{return type;}
+    int get_damage() const{return base_damage;}
+    int get_MP_cost() const{return MP_cost;}
+    float get_hit_rate() const{return hit_rate;}
+    float get_critical_rate() const{return critical_rate;}
 };
 
 class Accessory{
@@ -64,7 +65,7 @@ class Accessory{
 
 public:
     //constructor
-    Accessory(const string _name = "Basic Ring", const int _type_buff = 0, const int _buff_percentage = 0): name(_name), type_buff(_type_buff), buff_percentage(_buff_percentage){}
+    Accessory(const string _name = "Basic Ring", const int _type_buff = 0, const float _buff_percentage = 0): name(_name), type_buff(_type_buff), buff_percentage(_buff_percentage){}
     //citire si afisare
     friend istream& operator>>(istream& in, Accessory& a)
     {
@@ -73,12 +74,12 @@ public:
 
     friend ostream& operator<<(ostream& out, const Accessory& a)
     {
-        return out << a.name << '\n' << Types[a.type_buff] << " buffed by " << a.buff_percentage << '%';
+        return out << a.name << '\n' << Types[a.type_buff] << " buffed by " << 100 * a.buff_percentage << '%';
     }
 
     //getters
-    const int get_type(){return type_buff;}
-    const float get_buff(){return buff_percentage;}
+    int get_type() const{return type_buff;}
+    float get_buff() const{return buff_percentage;}
 };
 
 class Armour{
@@ -114,13 +115,13 @@ public:
     }
 
     //getters
-    const int get_bHP(){return bonus_HP;}
-    const int get_bMP(){return bonus_MP;}
-    const int get_bstr(){return bonus_strength;}
-    const int get_bdex(){return bonus_dexterity;}
-    const int get_bvit(){return bonus_vitality;}
-    const int get_bagi(){return bonus_agility;}
-    const int get_blck(){return bonus_luck;}
+    int get_bHP() const{return bonus_HP;}
+    int get_bMP() const{return bonus_MP;}
+    int get_bstr() const{return bonus_strength;}
+    int get_bdex() const{return bonus_dexterity;}
+    int get_bvit() const{return bonus_vitality;}
+    int get_bagi() const{return bonus_agility;}
+    int get_blck() const{return bonus_luck;}
 
 };
 
@@ -148,9 +149,9 @@ public:
     }
 
     //getters
-    const string get_name(){return name;}
-    const int get_HP_heal(){return HP_heal;}
-    const int get_MP_heal(){return MP_heal;}
+    string get_name() const{return name;}
+    int get_HP_heal() const{return HP_heal;}
+    int get_MP_heal() const{return MP_heal;}
 };
 
 class Entity{
@@ -166,11 +167,12 @@ class Entity{
 
 public:
     //constructor
-    Entity(const string _name = "Demon", const int _level = 1, const int _HP = 100, const int _MP = 30, const int _macca = 0, const int _strength = 3, const int _dexterity = 3, const int _vitality = 3, const int _agility = 3, const int _luck = 3): name(_name), level(_level), HP(_HP), MP(_MP), macca(_macca), strength(_strength), dexterity(_dexterity), vitality(_vitality), agility(_agility), luck(_luck)
+    Entity(const string name_ = "Demon", const int _level = 1, const int HP_ = 100, const int MP_ = 30, const int _macca = 0, const int _strength = 3, const int _dexterity = 3, const int _vitality = 3, const int _agility = 3, const int _luck = 3): name(name_), level(_level), HP(HP_), MP(MP_), macca(_macca), strength(_strength), dexterity(_dexterity), vitality(_vitality), agility(_agility), luck(_luck)
     {
         current_HP = HP;
         current_MP = MP;
         nr_items = 0;
+        xp = 0;
         for(int i = 0; i <= 7; i++)
             weakness_chart[i] = 0;
     }
@@ -214,32 +216,29 @@ public:
     }
 
     //getters
-    const int get_lvl(){return level;}
-    const int get_HP(){return HP;}
-    const int get_MP(){return MP;}
-    const int get_curHP(){return current_HP;}
-    const int get_curMP(){return current_MP;}
-    const int get_str(){return strength;}
-    const int get_dex(){return dexterity;}
-    const int get_vit(){return vitality;}
-    const int get_agi(){return agility;}
-    const int get_lck(){return luck;}
-    const int get_weakness(int type){return weakness_chart[type];}
-    const int get_nr_skills(){return skill_list.size();}
-    const Skill get_skill(int i){return skill_list[i];}
-    const int get_nr_items(){return inventory.size();}
-    const Consumable get_item(int i){return inventory[i];}
+    int get_curHP() const{return current_HP;}
+    int get_curMP() const{return current_MP;}
+    int get_vit() const{return vitality;}
+    int get_agi() const{return agility;}
+    int get_lck() const{return luck;}
+    int get_weakness(const int type) const{return weakness_chart[type];}
+    int get_nr_skills() const{return skill_list.size();}
+    Skill get_skill(const int i) const{return skill_list[i];}
+    int get_nr_items() const{return inventory.size();}
+    Consumable get_item(const int i) const{return inventory[i];}
 
-    //use skill
+    void changeWeakness(const int type,const int weak){weakness_chart[type]=weak;} //change a weakness
 
-    void takedamage(int damage){//entity takes a certain amount of damage
+    void newItem(const Consumable item){inventory.push_back(item);} //get an item
+
+    void takedamage(const int damage){//entity takes a certain amount of damage
         current_HP -= damage;
         current_HP=max(current_HP,0);
         current_HP=min(current_HP, HP);
         cout << "Dealt "<<damage<<" to "<<name<<".\n";
     }
 
-    bool learnSkill(Skill s) //learn a new skill
+    bool learnSkill(const Skill s) //learn a new skill
     {
         if(skill_list.size() < 4)
         {
@@ -249,9 +248,9 @@ public:
         return false;
     }
 
-    void forgetSkill(int i){skill_list.erase(skill_list.begin()+i);} //erase a skill
+    void forgetSkill(const int i){skill_list.erase(skill_list.begin()+i);} //erase a skill
 
-    void equip_armour(Armour a) { //equip armour and change stats to fit the bonus stats from the armour
+    void equip_armour(const Armour a) { //equip armour and change stats to fit the bonus stats from the armour
         HP += (a.get_bHP() - armour.get_bHP());
         MP += (a.get_bMP() - armour.get_bMP());
         strength += (a.get_bstr() - armour.get_bstr());
@@ -262,9 +261,9 @@ public:
         armour = a;
     }
 
-    void equip_accessory(Accessory a){accessory = a;} //equip accessory
+    void equip_accessory(const Accessory a){accessory = a;} //equip accessory
 
-    void useItem(int i){ //use a consumable and heal HP and MP
+    void useItem(const int i){ //use a consumable and heal HP and MP
         current_HP = min(HP, current_HP + inventory[i].get_HP_heal());
         current_MP = min(MP, current_MP + inventory[i].get_MP_heal());
         inventory.erase(inventory.begin()+i);
@@ -272,7 +271,7 @@ public:
 
     void guardHeal(){current_MP = min(MP, current_MP + MP / 7); current_HP = min(HP, current_HP + HP / 20);} //heal MP and HP if guarding
 
-    void battle_rewards(int macca_gained, int xp_gained){
+    void battle_rewards(const int macca_gained, const int xp_gained){
         macca += macca_gained;
         xp += xp_gained;
         while(xp > 1000)
@@ -282,7 +281,7 @@ public:
         }
     }
 
-    bool UseSkill(Skill s, Entity& enemy, bool guard = false) //an entity uses a certain skill on another entity that may or may not be guarding
+    bool UseSkill(const Skill s, Entity& enemy, const bool guard = false) //an entity uses a certain skill on another entity that may or may not be guarding
     {
         current_MP -= s.get_MP_cost(); //skill uses a certain amount of MP
         float hitr = s.get_hit_rate() * (agility / enemy.get_agi()); //calculating the hir rate, taking agility into account
@@ -290,7 +289,7 @@ public:
         int r = rand() % 1000, type = s.get_type(), weak = enemy.get_weakness(type); //generate a random number that determines if the skill hits and get the type of the move and the enemies weakness to the type
         if(r >= hitr*1000 || weak == 2) //do nothing if move misses or the skill is nulled by the enemy
             return false;
-        if(r < hitr*1000) {
+        else {
             int attack = 0;
             if (type == 0) //get the attack depending of the type of the move
                 attack = strength;
@@ -300,7 +299,7 @@ public:
                 attack = dexterity;
             float dmg = s.get_damage() * attack * min((float)(1), (float)(1+(float)(level)/100)); //get the base damage of the move taking into account the attack stat and the level
             if(accessory.get_type() == type) //buff the damage if the type is buffed by the accessory
-                dmg *= accessory.get_buff();
+                dmg *= (1 + accessory.get_buff());
             srand(time(0));
             r = rand() % 1000; //generate a random number that determines if the skill is a critical hit
             hitr = s.get_critical_rate() * (luck / enemy.get_lck());
@@ -345,12 +344,12 @@ public:
 };
 
 class Battle{
-    Entity player, enemy;
+    Entity& player, enemy;
     bool playerGuard = false, enemyGuard = false;
     int macca_gained, xp_gained;
 
 public:
-    Battle(Entity _player, Entity _enemy, int _macca_gained = 0, int _xp_gained = 0): player(_player), enemy(_enemy), macca_gained(_macca_gained), xp_gained(_xp_gained) {}
+    Battle(Entity& _player, Entity& _enemy, int _macca_gained = 0, int _xp_gained = 0): player(_player), enemy(_enemy), macca_gained(_macca_gained), xp_gained(_xp_gained) {}
 
     bool playerAction(int action){ //player action
         bool extraTurn = false;
@@ -442,7 +441,7 @@ public:
                 else
                 {
                     r = rand() % enemy.get_nr_skills(); //use random skill
-                    Skill s = enemy.get_skill(r);
+                    s = enemy.get_skill(r);
                     if(enemy.get_curMP() >= s.get_MP_cost())
                         extraTurn = enemy.UseSkill(s, player, playerGuard);
                 }
@@ -468,17 +467,40 @@ public:
 };
 
 int main() {
-    Entity pixie("Pixie", 3, 300, 100, 100, 4, 7, 3, 6, 4);
-    cout << pixie << '\n';
-    Skill agi("Agi", 3, 20, 8, 1, 0.2);
-    cout << pixie.learnSkill(agi) << '\n';
-    Entity pixie2 = pixie;
-    cout << pixie.UseSkill(agi, pixie2, false) << '\n';
-    pixie.afisBasicStats();
-    cout << '\n';
-    pixie2.afisBasicStats();
-    Battle b1(pixie, pixie2);
-    pixie = b1.battle();
-    cout << pixie << '\n';
+    Entity player("Bagsylina", 5, 172, 121, 0, 5, 5, 5, 5, 5);
+    Entity pixie("Pixie", 3, 100, 100, 100, 4, 7, 3, 6, 4);
+    Entity drunk("Drunk", 4, 210, 50, 200, 7, 1, 2, 1, 7);
+    Skill punch("Punch", 0, 10, 0, 1, 0.2), knife("Knife", 1, 25, 10, 1, 0.2);
+    Skill gun("Gun", 2, 40, 30, 0.8, 0.1), taser("Taser", 5, 30, 20, 0.95, 0.05);
+    Skill agi("Agi", 3, 20, 8, 1, 0.05), zan("Zan", 7, 20, 8, 1, 0.05);
+    Accessory battery("Battery", 5, 0.2);
+    Armour shirt("Tshirt", 10, 5, 0, 1, 0, 1, 0);
+    Consumable burger("Burger", 100, 10), energy("Energy drink", 0, 120), pizza("Pizza", 300, 50), bandage("Bandage", 60, 0);
+    player.equip_accessory(battery);
+    player.equip_armour(shirt);
+    player.newItem(burger);
+    player.newItem(pizza);
+    player.newItem(energy);
+    player.newItem(energy);
+    player.newItem(bandage);
+    player.newItem(bandage);
+    player.newItem(bandage);
+    cout << player << '\n';
+    player.learnSkill(punch);player.learnSkill(knife);player.learnSkill(gun);player.learnSkill(taser);
+    pixie.learnSkill(agi);pixie.learnSkill(zan);
+    drunk.learnSkill(punch);drunk.learnSkill(knife);
+    pixie.changeWeakness(2, -1);
+    pixie.changeWeakness(5, -1);
+    pixie.changeWeakness(0, 2);
+    drunk.changeWeakness(0, 1);
+    drunk.changeWeakness(1, -1);
+    drunk.changeWeakness(5, 3);
+    Battle b1(player, pixie, 100, 1000);
+    Battle b2(player, drunk, 200, 150);
+    b1.battle();
+    cout << player;
+    b2.battle();
+    cout << player;
+    drunk.forgetSkill(0);
     return 0;
 }
