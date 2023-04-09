@@ -449,7 +449,7 @@ public:
         }
     }
 
-    Entity battle(){
+    void battle(){
         while(player.get_curHP() && enemy.get_curHP())
         {
             player.afisBasicStats(); //show stats
@@ -462,7 +462,6 @@ public:
         }
         if(player.get_curHP())
             player.battle_rewards(macca_gained, xp_gained);
-        return player;
     }
 };
 
