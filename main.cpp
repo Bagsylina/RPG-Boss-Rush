@@ -68,7 +68,8 @@ public:
     //citire si afisare
     friend istream& operator>>(istream& in, Accessory& a)
     {
-        return in >> a.name >> a.type_buff >> a.buff_percentage;
+        in >> a.name >> a.type_buff >> a.buff_percentage;
+        return in;
     }
 
     friend ostream& operator<<(ostream& out, const Accessory& a)
@@ -90,7 +91,8 @@ public:
     //citire si afisare
     friend istream& operator>>(istream& in, Armour& a)
     {
-        return in >> a.name >> a.bonus_HP >> a.bonus_MP >> a.bonus_strength >> a.bonus_dexterity >> a.bonus_vitality >> a.bonus_agility >> a.bonus_luck;
+        in >> a.name >> a.bonus_HP >> a.bonus_MP >> a.bonus_strength >> a.bonus_dexterity >> a.bonus_vitality >> a.bonus_agility >> a.bonus_luck;
+        return in;
     }
 
     friend ostream& operator<<(ostream& out, const Armour& ar)
@@ -133,7 +135,8 @@ public:
     //citire si afisare
     friend istream& operator>>(istream& in, Consumable& c)
     {
-        return in >> c.name >> c.HP_heal >> c.MP_heal;
+        in >> c.name >> c.HP_heal >> c.MP_heal;
+        return in;
     }
     friend ostream& operator<<(ostream& out, const Consumable& c)
     {
@@ -178,7 +181,8 @@ public:
     //citire si afisare
     friend istream& operator>>(istream& in, Entity& e)
     {
-        return in >> e.name >> e.level >> e.HP >> e.MP >> e.strength >> e.dexterity >> e.vitality >> e.agility >> e.luck;
+        in >> e.name >> e.level >> e.HP >> e.MP >> e.strength >> e.dexterity >> e.vitality >> e.agility >> e.luck;
+        return in;
     }
 
     friend ostream& operator<<(ostream& out, const Entity& e)
