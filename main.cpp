@@ -359,7 +359,7 @@ public:
     Battle(Entity& _player, Entity& _enemy, int _macca_gained = 0, int _xp_gained = 0): player(_player), enemy(_enemy), macca_gained(_macca_gained), xp_gained(_xp_gained) {}
 
     bool playerAction(){ //player action
-        bool extraTurn = false, ok = false;
+        bool extraTurn = false;
         int action = 0;
         cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
         cin >> action;
@@ -387,7 +387,6 @@ public:
         {
             playerGuard = true;
             player.guardHeal();
-            ok = true;
         }
         else if (action == 3) { //using an item
             cout << "Choose item\n"; //printing available items
@@ -403,7 +402,6 @@ public:
                 cin >> action; //choosing an item
                 if(action <= nr && action >= 1) {
                     player.useItem(action - 1);
-                    ok = true;
                 }
                 else
                     cout << "Invalid item!\n";
