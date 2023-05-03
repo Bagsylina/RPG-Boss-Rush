@@ -52,7 +52,6 @@ public:
     }
 
     //geterts
-    string get_name() const{return name;}
     int get_type() const{return type;}
     int get_damage() const{return base_damage;}
     int get_MP_cost() const{return MP_cost;}
@@ -154,7 +153,6 @@ public:
     }
 
     //getters
-    string get_name() const{return name;}
     int get_HP_heal() const{return HP_heal;}
     int get_MP_heal() const{return MP_heal;}
 };
