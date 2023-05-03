@@ -3,8 +3,11 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 
 using namespace std;
+
+ifstream f ("tastatura.txt");
 
 const vector <string> Types = {"Physical", "Pierce", "Projectile", "Fire", "Water", "Electricity", "Earth", "Wind"};
 
@@ -33,7 +36,7 @@ public:
 
     friend ostream& operator<<(ostream& out, const Skill& s)
     {
-        return out << s.name << '\n' << "Deals " << s.base_damage << ' ' << Types[s.type] << ". Costs " << s.MP_cost << " MP. Has a hit rate of " << s.hit_rate << "and critical rate of " << s.critical_rate;
+        return out << s.name << '\n' << "Deals " << s.base_damage << ' ' << Types[s.type] << " damage. Costs " << s.MP_cost << " MP. Has a hit rate of " << s.hit_rate*100 << "% and critical rate of " << s.critical_rate*100 << '%';
     }
 
     //operator de copiere
@@ -140,7 +143,7 @@ public:
     }
     friend ostream& operator<<(ostream& out, const Consumable& c)
     {
-        out << c.name << "\n Heals ";
+        out << c.name << "\nHeals ";
         if(c.MP_heal == 0)
             out << c.HP_heal << " HP";
         else if (c.HP_heal == 0)
@@ -181,7 +184,8 @@ public:
     //citire si afisare
     friend istream& operator>>(istream& in, Entity& e)
     {
-        in >> e.name >> e.level >> e.HP >> e.MP >> e.strength >> e.dexterity >> e.vitality >> e.agility >> e.luck;
+        in >> e.name >> e.level >> e.HP >> e.MP >> e.macca >> e.strength >> e.dexterity >> e.vitality >> e.agility >> e.luck;
+        cout << e.name;
         return in;
     }
 
@@ -208,8 +212,9 @@ public:
         }
         out << "Armour: " << e.armour << '\n';
         out << "Accessory: " << e.accessory << '\n';
-        out << "Number of items in inventory: " << e.nr_items << '\n';
-        for(int i = 0; i < e.nr_items; i++)
+        nr = e.inventory.size();
+        out << "Number of items in inventory: " << nr << '\n';
+        for(int i = 0; i < nr; i++)
             out << e.inventory[i] << '\n';
         return out;
     }
@@ -355,62 +360,89 @@ class Battle{
 public:
     Battle(Entity& _player, Entity& _enemy, int _macca_gained = 0, int _xp_gained = 0): player(_player), enemy(_enemy), macca_gained(_macca_gained), xp_gained(_xp_gained) {}
 
-    bool playerAction(int action){ //player action
-        bool extraTurn = false;
-        if(action == 1) //attack the enemy
-        {
-            cout << "Choose attack\n"; //printing the available skills
-            int nr = player.get_nr_skills();
-            Skill s;
-            for(int i=0;i<nr;i++) {
-                s = player.get_skill(i);
-                cout << i+1 << ": " << s.get_name() << '\n';
+    bool playerAction(){ //player action
+        bool extraTurn = false, ok = false;
+        int action = 0;
+        while(!ok) {
+            cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
+            cin >> action;
+            while(cin.fail())
+            {
+                cin.clear();
+                cin.ignore(256,'\n');
+                cout << "Invalid action!\n";
+                cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
+                cin >> action;
             }
-            cin >> action; //choosing the skill
-            s = player.get_skill(action-1);
-            if(player.get_curMP() >= s.get_MP_cost()) //using the skill if there is enough MP
-                extraTurn = player.UseSkill(s, enemy, enemyGuard);
-        }
-        else if(action == 2) //guarding
-        {
-            playerGuard = true;
-            player.guardHeal();
-        }
-        else if(action == 3) { //using an item
-            cout << "Choose item\n"; //printing available items
-            int nr = player.get_nr_items();
-            if(nr == 0)
-                cout << "No items\n";
-            else {
-                Consumable c;
+            if (action == 1) //attack the enemy
+            {
+                cout << "Choose attack\n"; //printing the available skills
+                int nr = player.get_nr_skills();
+                Skill s;
                 for (int i = 0; i < nr; i++) {
-                    c = player.get_item(i);
-                    cout << i + 1 << ": " << c.get_name() << '\n';
+                    s = player.get_skill(i);
+                    cout << i + 1 << ": " << s << '\n';
                 }
-                cin >> action; //choosing an item
-                player.useItem(action - 1);
+                cin >> action; //choosing the skill
+                if(action >= 1 && action <= 4) {
+                    s = player.get_skill(action - 1);
+                    if (player.get_curMP() >= s.get_MP_cost()) //using the skill if there is enough MP
+                    {
+                        extraTurn = player.UseSkill(s, enemy, enemyGuard);
+                        ok = true;
+                    } else
+                        cout << "Not enough MP!\n";
+                }
+                else
+                    cout << "Invalid attack!\n";
             }
-        }
-        else // showing the full stats of the player and enemy and getting an extra turn
-        {
-            cout << player << '\n' << enemy << '\n';
-            extraTurn = true;
+            else if (action == 2) //guarding
+            {
+                playerGuard = true;
+                player.guardHeal();
+                ok = true;
+            }
+            else if (action == 3) { //using an item
+                cout << "Choose item\n"; //printing available items
+                int nr = player.get_nr_items();
+                if (nr == 0)
+                    cout << "No items!\n";
+                else {
+                    Consumable c;
+                    for (int i = 0; i < nr; i++) {
+                        c = player.get_item(i);
+                        cout << i + 1 << ": " << c << '\n';
+                    }
+                    cin >> action; //choosing an item
+                    if(action <= nr && action >= 1) {
+                        player.useItem(action - 1);
+                        ok = true;
+                    }
+                    else
+                        cout << "Invalid item!\n";
+                }
+            }
+            else if (action == 4) // showing the full stats of the player and enemy and getting an extra turn
+            {
+                cout << player << '\n' << enemy << '\n';
+                extraTurn = true;
+                ok = true;
+            }
+            else
+                cout << "Invalid action!\n";
         }
         return extraTurn; //returns if the player got an extra turn after his action
     }
     void battleTurnPlayer(){ //player turn
         playerGuard = false;
-        cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
-        int action = 0;
-        cin >> action; //choosing an action
-        bool extraTurn = playerAction(action);
+        bool extraTurn = playerAction();
+        cout << '\n';
         if(extraTurn && enemy.get_curHP()) //another action if the player got an extra turn
         {
+            cout << "You get another action\n\n";
             player.afisBasicStats();
             enemy.afisBasicStats();
-            cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
-            cin >> action;
-            playerAction(action);
+            playerAction();
         }
     }
 
@@ -454,15 +486,23 @@ public:
     }
 
     void battle(){
-        while(player.get_curHP() && enemy.get_curHP())
+        bool exit = false;
+        while(player.get_curHP() && enemy.get_curHP() && !exit)
         {
-            player.afisBasicStats(); //show stats
-            enemy.afisBasicStats();
-            battleTurnPlayer(); //player turn
-            player.afisBasicStats(); //show stats
-            enemy.afisBasicStats();
-            if(enemy.get_curHP()) //enemy turn
-                battleTurnEnemy();
+            cout << "Want to exit the battle?\n1: Yes\nAny other input: No\n";
+            int action = 0;
+            cin >> action;
+            if(action == 1)
+                exit = true;
+            if(!exit) {
+                player.afisBasicStats(); //show stats
+                enemy.afisBasicStats();
+                battleTurnPlayer(); //player turn
+                player.afisBasicStats(); //show stats
+                enemy.afisBasicStats();
+                if (enemy.get_curHP()) //enemy turn
+                    battleTurnEnemy();
+            }
         }
         if(player.get_curHP())
             player.battle_rewards(macca_gained, xp_gained);
@@ -505,5 +545,6 @@ int main() {
     b2.battle();
     cout << player;
     drunk.forgetSkill(0);
+    f.close();
     return 0;
 }
