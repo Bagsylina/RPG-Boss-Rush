@@ -361,74 +361,61 @@ public:
     bool playerAction(){ //player action
         bool extraTurn = false, ok = false;
         int action = 0;
-        while(!ok) {
-            cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
-            cin >> action;
-            while(cin.fail())
-            {
-                cin.clear();
-                cin.ignore(256,'\n');
-                cout << "Invalid action!\n";
-                cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
-                cin >> action;
+        cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
+        cin >> action;
+        if (action == 1) //attack the enemy
+        {
+            cout << "Choose attack\n"; //printing the available skills
+            int nr = player.get_nr_skills();
+            Skill s;
+            for (int i = 0; i < nr; i++) {
+                s = player.get_skill(i);
+                cout << i + 1 << ": " << s << '\n';
             }
-            if (action == 1) //attack the enemy
-            {
-                cout << "Choose attack\n"; //printing the available skills
-                int nr = player.get_nr_skills();
-                Skill s;
-                for (int i = 0; i < nr; i++) {
-                    s = player.get_skill(i);
-                    cout << i + 1 << ": " << s << '\n';
-                }
-                cin >> action; //choosing the skill
-                if(action >= 1 && action <= 4) {
-                    s = player.get_skill(action - 1);
-                    if (player.get_curMP() >= s.get_MP_cost()) //using the skill if there is enough MP
-                    {
-                        extraTurn = player.UseSkill(s, enemy, enemyGuard);
-                        ok = true;
-                    } else
-                        cout << "Not enough MP!\n";
-                }
+            cin >> action; //choosing the skill
+            if(action >= 1 && action <= 4) {
+                s = player.get_skill(action - 1);
+                if (player.get_curMP() >= s.get_MP_cost()) //using the skill if there is enough MP
+                    extraTurn = player.UseSkill(s, enemy, enemyGuard);
                 else
-                    cout << "Invalid attack!\n";
-            }
-            else if (action == 2) //guarding
-            {
-                playerGuard = true;
-                player.guardHeal();
-                ok = true;
-            }
-            else if (action == 3) { //using an item
-                cout << "Choose item\n"; //printing available items
-                int nr = player.get_nr_items();
-                if (nr == 0)
-                    cout << "No items!\n";
-                else {
-                    Consumable c;
-                    for (int i = 0; i < nr; i++) {
-                        c = player.get_item(i);
-                        cout << i + 1 << ": " << c << '\n';
-                    }
-                    cin >> action; //choosing an item
-                    if(action <= nr && action >= 1) {
-                        player.useItem(action - 1);
-                        ok = true;
-                    }
-                    else
-                        cout << "Invalid item!\n";
-                }
-            }
-            else if (action == 4) // showing the full stats of the player and enemy and getting an extra turn
-            {
-                cout << player << '\n' << enemy << '\n';
-                extraTurn = true;
-                ok = true;
+                    cout << "Not enough MP!\n";
             }
             else
-                cout << "Invalid action!\n";
+                cout << "Invalid attack!\n";
         }
+        else if (action == 2) //guarding
+        {
+            playerGuard = true;
+            player.guardHeal();
+            ok = true;
+        }
+        else if (action == 3) { //using an item
+            cout << "Choose item\n"; //printing available items
+            int nr = player.get_nr_items();
+            if (nr == 0)
+                cout << "No items!\n";
+            else {
+                Consumable c;
+                for (int i = 0; i < nr; i++) {
+                    c = player.get_item(i);
+                    cout << i + 1 << ": " << c << '\n';
+                }
+                cin >> action; //choosing an item
+                if(action <= nr && action >= 1) {
+                    player.useItem(action - 1);
+                    ok = true;
+                }
+                else
+                    cout << "Invalid item!\n";
+            }
+        }
+        else if (action == 4) // showing the full stats of the player and enemy and getting an extra turn
+        {
+            cout << player << '\n' << enemy << '\n';
+            extraTurn = true;
+        }
+        else
+            cout << "Invalid action!\n";
         return extraTurn; //returns if the player got an extra turn after his action
     }
     void battleTurnPlayer(){ //player turn
