@@ -380,8 +380,11 @@ public:
                 else
                     cout << "Not enough MP!\n";
             }
-            else
+            else{
                 cout << "Invalid attack!\n";
+                cin.clear();
+                cin.ignore(256,'\n');
+            }
         }
         else if (action == 2) //guarding
         {
@@ -403,8 +406,11 @@ public:
                 if(action <= nr && action >= 1) {
                     player.useItem(action - 1);
                 }
-                else
+                else {
                     cout << "Invalid item!\n";
+                    cin.clear();
+                    cin.ignore(256,'\n');
+                }
             }
         }
         else if (action == 4) // showing the full stats of the player and enemy and getting an extra turn
@@ -412,8 +418,11 @@ public:
             cout << player << '\n' << enemy << '\n';
             extraTurn = true;
         }
-        else
+        else {
             cout << "Invalid action!\n";
+            cin.clear();
+            cin.ignore(256,'\n');
+        }
         return extraTurn; //returns if the player got an extra turn after his action
     }
     void battleTurnPlayer(){ //player turn
@@ -477,6 +486,8 @@ public:
             cin >> action;
             if(action == 1)
                 exit = true;
+            cin.clear();
+            cin.ignore(256,'\n');
             if(!exit) {
                 player.afisBasicStats(); //show stats
                 enemy.afisBasicStats();
