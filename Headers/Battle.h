@@ -6,6 +6,7 @@
 #define OOP_BATTLE_H
 #include <iostream>
 #include "Player.h"
+#include "Exceptions.h"
 
 class Battle{
     Player& player;

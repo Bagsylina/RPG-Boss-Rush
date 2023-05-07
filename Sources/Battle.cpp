@@ -8,17 +8,31 @@ bool Battle::playerAction(int action){ //player action
     bool extraTurn = false;
     if(action == 1) //attack the enemy
     {
-        cout << "Choose attack\n"; //printing the available skills
-        int nr = player.get_nr_skills();
-        Skill s;
-        for(int i=0;i<nr;i++) {
-            s = player.get_skill(i);
-            cout << i+1 << ": " << s.get_name() << '\n';
+        try{
+            cout << "Choose attack\n"; //printing the available skills
+            int nr = player.get_nr_skills();
+            if(nr == 0)
+                throw NoSkills();
+            Skill s;
+            for(int i=0;i<nr;i++) {
+                s = player.get_skill(i);
+                cout << i+1 << ": " << s.get_name() << '\n';
+            }
+            cin >> action; //choosing the skill
+                if(action > nr || action < 1)
+                    throw InvalidInput();
+                s = player.get_skill(action - 1);
+                if (player.get_curMP() >= s.get_MP_cost()) //using the skill if there is enough MP
+                    extraTurn = player.UseSkill(s, enemy, enemyGuard);
         }
-        cin >> action; //choosing the skill
-        s = player.get_skill(action-1);
-        if(player.get_curMP() >= s.get_MP_cost()) //using the skill if there is enough MP
-            extraTurn = player.UseSkill(s, enemy, enemyGuard);
+        catch(NoSkills& e){
+            cout << e.what();
+        }
+        catch(InvalidInput& e) {
+            cout << e.what();
+            cin.clear();
+            cin.ignore(256, '\n');
+        }
     }
     else if(action == 2) //guarding
     {
@@ -26,16 +40,28 @@ bool Battle::playerAction(int action){ //player action
         player.guardHeal();
     }
     else if(action == 3) { //using an item
-        cout << "Choose item\n"; //printing available items
-        int nr = player.get_nr_items();
-        if(nr == 0)
-            cout << "No items\n";
-        else {
-            for (int i = 0; i < nr; i++) {
-                cout << i + 1 << ": " << player.getItem(i).get_name() << '\n';
+        try {
+            cout << "Choose item\n"; //printing available items
+            int nr = player.get_nr_items();
+            if (nr == 0)
+                throw NoItems();
+            else {
+                for (int i = 0; i < nr; i++) {
+                    cout << i + 1 << ": " << player.getItem(i).get_name() << '\n';
+                }
+                cin >> action; //choosing an item
+                if(action < 1 || action > nr)
+                    throw InvalidInput();
+                player.useItem(action - 1);
             }
-            cin >> action; //choosing an item
-            player.useItem(action-1);
+        }
+        catch(NoItems& e){
+            cout << e.what();
+        }
+        catch(InvalidInput& e) {
+            cout << e.what();
+            cin.clear();
+            cin.ignore(256, '\n');
         }
     }
     else // showing the full stats of the player and enemy and getting an extra turn
@@ -49,15 +75,32 @@ void Battle::battleTurnPlayer(){ //player turn
     playerGuard = false;
     cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
     int action = 0;
-    cin >> action; //choosing an action
-    bool extraTurn = playerAction(action);
+    bool extraTurn = false;
+    try {
+        cin >> action; //choosing an action
+        if(action < 1 || action > 4)
+            throw InvalidInput();
+        extraTurn = playerAction(action);
+    }
+    catch(InvalidInput& e){
+        cout << e.what();
+    }
     if(extraTurn && enemy.get_curHP()) //another action if the player got an extra turn
     {
         player.afisBasicStats();
         enemy.afisBasicStats();
         cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
-        cin >> action;
-        playerAction(action);
+        try {
+            cin >> action;
+            if(action < 1 || action > 4)
+                throw InvalidInput();
+            playerAction(action);
+        }
+        catch(InvalidInput& e){
+            cout << e.what();
+            cin.clear();
+            cin.ignore(256, '\n');
+        }
     }
 }
 
