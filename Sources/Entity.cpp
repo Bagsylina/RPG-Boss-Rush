@@ -33,7 +33,8 @@ void Entity::learnSkill(const Skill& s) {skill_list.push_back(s);} //learn a new
 
 void Entity::printSkills() {
     //cout << skill_list.size() << '\n';
-    for(int i = 0; i < skill_list.size(); i++)
+    int nr = skill_list.size();
+    for(int i = 0; i < nr; i++)
         cout << i + 1 << ": " <<  skill_list[i] << '\n';
 }
 
