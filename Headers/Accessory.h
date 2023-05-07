@@ -28,7 +28,7 @@ public:
         return out << a.name << '\n' << Types[a.type_buff] << " buffed by " << 100 * a.buff_percentage << '%';
     }
 
-    virtual int itemType(){return 2;}
+    int itemType(){return 2;}
 
     //getters
     int get_type() const;

@@ -69,7 +69,7 @@ public:
 
     //virtual void printSkills();
 
-    virtual void forgetSkill(const int);
+    void forgetSkill(const int);
 
     void spend_macca(int x);
 

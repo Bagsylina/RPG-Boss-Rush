@@ -40,7 +40,7 @@ public:
         return out;
     }
 
-    virtual int itemType(){return 3;}
+    int itemType(){return 3;}
 
     //getters
     int get_bHP() const;

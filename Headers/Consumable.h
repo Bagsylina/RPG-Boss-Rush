@@ -31,7 +31,7 @@ public:
         return out;
     }
 
-    virtual int itemType(){return 4;}
+    int itemType(){return 4;}
 
     //getters
     int get_HP_heal() const;
