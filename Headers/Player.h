@@ -54,8 +54,9 @@ public:
         }
         out << "Armour: " << e.armour << '\n';
         out << "Accessory: " << e.accessory << '\n';
-        out << "Number of items in inventory: " << e.inventory.size() << '\n';
-        for(int i = 0; i < e.inventory.size(); i++)
+        nr = e.inventory.size();
+        out << "Number of items in inventory: " << nr << '\n';
+        for(int i = 0; i < nr; i++)
             out << *e.inventory[i] << '\n';
         return out;
     }
@@ -69,7 +70,7 @@ public:
 
     //virtual void printSkills();
 
-    void forgetSkill(const int);
+    void forgetSkill(const int) override;
 
     void spend_macca(int x);
 
@@ -83,7 +84,7 @@ public:
 
     void battle_rewards(const int, const int);
 
-    bool UseSkill(const Skill&, Entity&, const bool guard);
+    bool UseSkill(const Skill&, Entity&, const bool guard) override;
 
     void useItem(int);
 

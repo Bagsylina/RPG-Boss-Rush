@@ -40,7 +40,7 @@ public:
         return out;
     }
 
-    int itemType(){return 3;}
+    int itemType() override{return 3;}
 
     //getters
     int get_bHP() const;

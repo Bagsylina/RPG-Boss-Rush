@@ -31,7 +31,7 @@ public:
         return out;
     }
 
-    int itemType(){return 4;}
+    int itemType() override{return 4;}
 
     //getters
     int get_HP_heal() const;

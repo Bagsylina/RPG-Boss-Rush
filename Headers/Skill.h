@@ -41,7 +41,7 @@ public:
         return *this;
     }
 
-    virtual int itemType(){return 1;}
+    int itemType() override{return 1;}
 
     //geterts
     int get_type() const;
