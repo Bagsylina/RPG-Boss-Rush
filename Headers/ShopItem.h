@@ -11,8 +11,7 @@ class ShopItem{
     int cost, min_level;
 
 public:
-    ShopItem() {product = new Item(); cost = 1; min_level = 1;}
-    ShopItem(Item* _product, int _cost = 1, int _min_level = 1): product(_product), cost(_cost), min_level(_min_level) {}
+    explicit ShopItem(Item* _product, int _cost = 1, int _min_level = 1): product(_product), cost(_cost), min_level(_min_level) {}
 
     //getters
     Item* get_product() const{return product;}

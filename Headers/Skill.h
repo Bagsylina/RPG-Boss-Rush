@@ -22,7 +22,7 @@ public:
     Skill(const Skill & other): Item(other.name), type(other.type), base_damage(other.base_damage), MP_cost(other.MP_cost), hit_rate(other.hit_rate), critical_rate(other.critical_rate){}
 
     //destructor
-    ~Skill(){}
+    virtual ~Skill() {}
 
     //citire si afisare
     friend std::istream& operator>>(std::istream&, Skill&);
