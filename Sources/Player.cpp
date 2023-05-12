@@ -39,8 +39,15 @@ Armour Player::getArmour() const {return armour;}
 
 void Player::spend_macca(int x){macca-=x;}
 
-void Player::newItem(Item* item){inventory.push_back(item);} //get an item
-void Player::deleteItem(int i){inventory.erase(inventory.begin() + i);}
+void Player::newItem(Item* item){
+    Item* p = item->clone();
+    inventory.push_back(p);
+} //get an item
+
+void Player::deleteItem(int i){
+    delete inventory[i];
+    inventory.erase(inventory.begin() + i);
+}
 
 void Player::equip_armour(const Armour& a) { //equip armour and change stats to fit the bonus stats from the armour
     HP += (a.get_bHP() - armour.get_bHP());
@@ -148,7 +155,7 @@ void Player::useItemSkill(Item *p){ //player equips a skill from inventory
                 throw InvalidInput();
             Skill s1 = get_skill(action - 1);
             Item *p1 = new Skill(s1);
-            newItem(p1->clone());
+            newItem(p1);
             forgetSkill(action - 1);
         }
         catch (InvalidInput &e) {
@@ -165,7 +172,7 @@ void Player::useItemAccessory(Item *p){ //player equips an accessory and puts th
     Accessory* a = dynamic_cast<Accessory*>(p);
     Accessory a1 = getAccessory();
     Item *p1 = new Accessory(a1);
-    newItem(p1->clone());
+    newItem(p1);
     equip_accessory(*a);
 }
 
@@ -173,7 +180,7 @@ void Player::useItemArmour(Item *p){ //player equips armour and puts the old one
     Armour* a = dynamic_cast<Armour*>(p);
     Armour a1 = getArmour();
     Item *p1 = new Armour(a1);
-    newItem(p1->clone());
+    newItem(p1);
     equip_armour(*a);
 }
 
