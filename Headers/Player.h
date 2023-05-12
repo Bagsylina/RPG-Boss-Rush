@@ -25,6 +25,10 @@ public:
         xp = 0;
         macca = 0;
     }
+    ~Player(){
+        for(auto& i: inventory)
+            delete i;
+    }
 
     friend std::ostream& operator<<(std::ostream&, const Player&);
     void printItems() const;
