@@ -17,7 +17,6 @@ public:
     virtual void print(std::ostream&) const;
 
     virtual int itemType() const;
-    std::string get_name() const;
 };
 
 

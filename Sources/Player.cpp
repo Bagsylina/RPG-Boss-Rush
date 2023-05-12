@@ -4,7 +4,6 @@ std::ostream& operator<<(std::ostream& out, const Player& e){
     e.afisBasicStats(out);
     out << "Strength: " << e.strength << " Dexterity: " << e.dexterity << " Vitality: " << e.vitality << " Agility: "<< e.agility << " Luck: " << e.luck << '\n';
     out << "Number of skills: " << e.skill_list.size() << '\n';
-    int nr=e.skill_list.size();
     e.printSkills();
     for(int i = 0; i < 8; i++)
     {
@@ -20,8 +19,7 @@ std::ostream& operator<<(std::ostream& out, const Player& e){
     }
     out << "Armour: " << e.armour << '\n';
     out << "Accessory: " << e.accessory << '\n';
-    nr = e.inventory.size();
-    out << "Number of items in inventory: " << nr << '\n';
+    out << "Number of items in inventory: " << e.inventory.size() << '\n';
     e.printItems();
     return out;
 }
@@ -35,7 +33,6 @@ void Player::printItems() const{ // prints the items in the players inventory
 //getters
 int Player::get_macca() const{return macca;}
 int Player::get_nr_items() const{return inventory.size();}
-Item* Player::getItem(const int i) const{return inventory[i];}
 Accessory Player::getAccessory() const{return accessory;}
 Armour Player::getArmour() const {return armour;}
 

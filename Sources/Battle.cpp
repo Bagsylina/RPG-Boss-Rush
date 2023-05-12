@@ -13,13 +13,13 @@ bool Battle::playerAction(int action){ //player action
 
 bool Battle::playerActionAttack(){
     bool extraTurn = false;
-    int action = 0;
     std::cout << "Choose attack\n"; //printing the available skills
     try{
         int nr = player.get_nr_skills();
         if(nr == 0)
             throw NoSkills();
         player.printSkills();
+        int action = 0;
         std::cin >> action; //choosing the skill
         if(action > nr || action < 1)
             throw InvalidInput();
@@ -39,13 +39,13 @@ bool Battle::playerActionAttack(){
 }
 
 void Battle::playerActionItem(){
-    int action = 0;
     std::cout << "Choose item\n"; //printing available items
     try {
         int nr = player.get_nr_items();
         if (nr == 0)
             throw NoItems();
         player.printItems();
+        int action = 0;
         std::cin >> action; //choosing an item
         if(action < 1 || action > nr)
             throw InvalidInput();

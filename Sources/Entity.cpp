@@ -13,7 +13,6 @@ std::ostream& operator<<(std::ostream& out, const Entity& e)
     e.afisBasicStats(out);
     out << "Strength: " << e.strength << " Dexterity: " << e.dexterity << " Vitality: " << e.vitality << " Agility: "<< e.agility << " Luck: " << e.luck << '\n';
     out << "Number of skills: " << e.skill_list.size() << '\n';
-    int nr=e.skill_list.size();
     e.printSkills();
     for(int i = 0; i < 8; i++)
     {

@@ -32,7 +32,6 @@ public:
     //getters
     int get_macca() const;
     int get_nr_items() const;
-    Item* getItem(const int) const;
     Accessory getAccessory() const;
     Armour getArmour() const;
 

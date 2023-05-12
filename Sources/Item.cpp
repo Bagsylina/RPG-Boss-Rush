@@ -13,5 +13,3 @@ void Item::print(std::ostream &where) const {
 }
 
 int Item::itemType() const{return 0;}
-
-std::string Item::get_name() const{return name;}
