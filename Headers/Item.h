@@ -10,6 +10,7 @@ protected:
     static const std::vector <std::string> Types;
 public:
     Item(const std::string& _name = ""): name(_name){}
+    virtual ~Item() = default;
     virtual Item* clone() const = 0;
 
     friend std::ostream& operator<<(std::ostream&, const Item&);
