@@ -3,31 +3,29 @@
 
 #include <exception>
 
-using namespace std;
-
-class NoItems: public exception{
+class NoItems: public std::exception{
 public:
     const char * what () const throw (){return "No items in inventory.\n";}
 };
 
-class NoSkills: public exception{
+class NoSkills: public std::exception{
 public:
     const char * what () const throw (){return "No skills equipped.\n";}
 };
 
-class InvalidInput: public exception{
+class InvalidInput: public std::exception{
 public:
     const char * what () const throw (){return "Invalid input.\n";}
 };
 
-class NoMoney: public exception{
+class NoMoney: public std::exception{
 public:
-    const char * what () const throw (){return "Not enough money\n";}
+    const char * what () const throw (){return "Not enough money.\n";}
 };
 
-class NoLevel: public exception{
+class NoLevel: public std::exception{
 public:
-    const char * what () const throw (){return "Level too low\n";}
+    const char * what () const throw (){return "Level too low.\n";}
 };
 
 #endif //OOP_EXCEPTIONS_H

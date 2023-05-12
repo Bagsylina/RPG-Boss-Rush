@@ -1,28 +1,23 @@
-//
-// Created by Anghel Fabian on 19/04/2023.
-//
-
 #ifndef OOP_ITEM_H
 #define OOP_ITEM_H
 #include <string>
 #include <iostream>
 #include <vector>
 
-const std::vector <std::string> Types = {"Physical", "Pierce", "Projectile", "Fire", "Water", "Electricity", "Earth", "Wind"};
-
 class Item{
 protected:
     std::string name;
+    static const std::vector <std::string> Types;
 public:
     Item(const std::string& _name = ""): name(_name){}
+    virtual Item* clone() const = 0;
 
-    friend std::ostream& operator<<(std::ostream& out, const Item& i)\
-    {
-        return out << i.name;
-    }
+    friend std::ostream& operator<<(std::ostream&, const Item&);
 
-    virtual int itemType(){return 0;}
-    std::string get_name() const{return name;}
+    virtual void print(std::ostream&) const;
+
+    virtual int itemType() const;
+    std::string get_name() const;
 };
 
 

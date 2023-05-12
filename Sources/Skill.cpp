@@ -1,7 +1,3 @@
-//
-// Created by Anghel Fabian on 19/04/2023.
-//
-
 #include "../Headers/Skill.h"
 
 //citire si afisare
@@ -13,8 +9,26 @@ std::istream& operator>>(std::istream& in, Skill& s)
 
 std::ostream& operator<<(std::ostream& out, const Skill& s)
 {
-    return out << s.name << '\n' << "Deals " << s.base_damage << ' ' << Types[s.type] << ". Costs " << s.MP_cost << " MP. Has a hit rate of " << s.hit_rate*100 << "% and critical rate of " << s.critical_rate*100 << '%';
+    s.print(out);
+    return out;
 }
+
+Skill& Skill::operator = (const Skill& other)
+{
+    name = other.name;
+    type = other.type;
+    base_damage = other.base_damage;
+    MP_cost = other.MP_cost;
+    hit_rate = other.hit_rate;
+    critical_rate = other.critical_rate;
+    return *this;
+}
+
+void Skill::print(std::ostream& where) const{
+    where << name << '\n' << "Deals " << base_damage << ' ' << Skill::Types[type] << ". Costs " << MP_cost << " MP. Has a hit rate of " << hit_rate*100 << "% and critical rate of " << critical_rate*100 << '%';
+}
+
+int Skill::itemType() const {return 1;}
 
 //geterts
 int Skill::get_type() const{return type;}

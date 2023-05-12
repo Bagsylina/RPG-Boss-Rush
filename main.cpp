@@ -1,13 +1,4 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <cstdlib>
-#include <ctime>
-#include "Headers/Player.h"
-#include "Headers/Consumable.h"
 #include "Headers/Game.h"
-
-using namespace std;
 
 int main() {
     Player player("Bagsylina", 5, 172, 121, 5, 5, 5, 5, 5);
@@ -21,14 +12,14 @@ int main() {
     Consumable burger("Burger", 100, 10), energy("Energy drink", 0, 120), pizza("Pizza", 300, 50), bandage("Bandage", 60, 0);
     player.equip_accessory(battery);
     player.equip_armour(shirt);
-    player.newItem(&burger);
-    player.newItem(&pizza);
-    player.newItem(&energy);
-    player.newItem(&energy);
-    player.newItem(&bandage);
-    player.newItem(&bandage);
-    player.newItem(&bandage);
-    cout << player << '\n';
+    player.newItem(burger.clone());
+    player.newItem(pizza.clone());
+    player.newItem(energy.clone());
+    player.newItem(energy.clone());
+    player.newItem(bandage.clone());
+    player.newItem(bandage.clone());
+    player.newItem(bandage.clone());
+    std::cout << player << '\n';
     player.learnSkill(punch);player.learnSkill(knife);player.learnSkill(gun);player.learnSkill(taser);
     pixie.learnSkill(agi);pixie.learnSkill(zan);
     drunk.learnSkill(punch);drunk.learnSkill(knife);
