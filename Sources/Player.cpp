@@ -156,6 +156,7 @@ void Player::useItemSkill(Item *p){ //player equips a skill from inventory
             Skill s1 = get_skill(action - 1);
             Item *p1 = new Skill(s1);
             newItem(p1);
+            delete p1;
             forgetSkill(action - 1);
         }
         catch (InvalidInput &e) {
@@ -173,6 +174,7 @@ void Player::useItemAccessory(Item *p){ //player equips an accessory and puts th
     Accessory a1 = getAccessory();
     Item *p1 = new Accessory(a1);
     newItem(p1);
+    delete p1;
     equip_accessory(*a);
 }
 
@@ -181,6 +183,7 @@ void Player::useItemArmour(Item *p){ //player equips armour and puts the old one
     Armour a1 = getArmour();
     Item *p1 = new Armour(a1);
     newItem(p1);
+    delete p1;
     equip_armour(*a);
 }
 
