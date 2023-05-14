@@ -1,5 +1,20 @@
 #include "../Headers/Player.h"
 
+Player& Player::operator = (const Player& other){
+    name = other.name; level = other.level; HP = other.HP; MP = other.MP;
+    strength = other.strength; dexterity = other.dexterity; vitality = other.vitality; agility = other.agility; luck = other.luck;
+    current_HP = other.current_HP; current_MP = other.current_MP; xp = other.xp; macca = other.macca;
+    for(int i = 0; i <= 7; i++)
+        weakness_chart[i] = other.weakness_chart[i];
+    for(auto& i: inventory)
+        delete i;
+    while(!inventory.empty())
+        inventory.pop_back();
+    for(auto& i: other.inventory)
+        newItem(*i);
+    return *this;
+}
+
 std::ostream& operator<<(std::ostream& out, const Player& e){
     e.afisBasicStats(out);
     out << "Strength: " << e.strength << " Dexterity: " << e.dexterity << " Vitality: " << e.vitality << " Agility: "<< e.agility << " Luck: " << e.luck << '\n';

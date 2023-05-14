@@ -7,8 +7,14 @@ class ShopItem{
     int cost, min_level;
 
 public:
-    explicit ShopItem(Item* sproduct, int scost = 1, int smin_level = 1): product(sproduct), cost(scost), min_level(smin_level) {}
-    //~ShopItem(){delete product;}
+    explicit ShopItem(Item* sproduct, int scost = 1, int smin_level = 1): cost(scost), min_level(smin_level){
+        product = sproduct->clone();
+    }
+    ShopItem(const ShopItem& other): cost(other.cost), min_level(other.min_level){
+        product = other.product->clone();
+    }
+    ~ShopItem(){delete product;}
+    ShopItem& operator = (const ShopItem&);
 
     //getters
     Item* get_product() const;

@@ -25,10 +25,26 @@ public:
         xp = 0;
         macca = 0;
     }
+
+    Player(const Player& other): Entity(other.name, other.level, other.HP, other.MP, other.strength, other.dexterity, other.vitality, other.agility, other.luck){
+        current_HP = other.current_HP;
+        current_MP = other.current_MP;
+        for(int i = 0; i <= 7; i++)
+            weakness_chart[i] = 0;
+        xp = other.xp;
+        macca = other.macca;
+        for(auto& i: other.inventory)
+            newItem(*i);
+    }
+
     ~Player(){
         for(auto& i: inventory)
             delete i;
+        while(!inventory.empty())
+            inventory.pop_back();
     }
+
+    Player& operator = (const Player&);
 
     friend std::ostream& operator<<(std::ostream&, const Player&);
     void printItems(std::ostream&) const;
