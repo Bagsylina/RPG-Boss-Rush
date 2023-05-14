@@ -39,7 +39,7 @@ Armour Player::getArmour() const {return armour;}
 
 void Player::spend_macca(int x){macca-=x;}
 
-void Player::newItem(Item& item){
+void Player::newItem(const Item& item){
     inventory.push_back(item.clone());
 } //get an item
 

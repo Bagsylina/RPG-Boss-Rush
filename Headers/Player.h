@@ -41,7 +41,7 @@ public:
 
     void spend_macca(int x);
 
-    void newItem(Item&);
+    void newItem(const Item&);
     void deleteItem(int i);
 
     void equip_armour(const Armour&);
