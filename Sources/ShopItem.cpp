@@ -1,11 +1,12 @@
 #include "../Headers/ShopItem.h"
 
 ShopItem& ShopItem::operator = (const ShopItem& other){
-    if(product)
+    if(this != &other) {
         delete product;
-    product = other.product->clone();
-    cost = other.cost;
-    min_level = other.min_level;
+        product = other.product->clone();
+        cost = other.cost;
+        min_level = other.min_level;
+    }
     return *this;
 }
 
