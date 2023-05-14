@@ -4,20 +4,23 @@
 #include <iostream>
 #include <vector>
 
+class Player;
+
 class Item{
 protected:
     std::string name;
     static const std::vector <std::string> Types;
 public:
-    Item(const std::string& _name = ""): name(_name){}
+    Item(const std::string& iname = ""): name(iname){}
     virtual ~Item() = default;
     virtual Item* clone() const = 0;
 
     friend std::ostream& operator<<(std::ostream&, const Item&);
 
-    virtual void print(std::ostream&) const;
+    virtual void useThis(Player&) = 0;
 
-    virtual int itemType() const;
+private:
+    virtual void print(std::ostream&) const;
 };
 
 

@@ -8,7 +8,7 @@ class Armour : public Item{
     int bonus_HP, bonus_MP, bonus_strength, bonus_dexterity, bonus_vitality, bonus_agility, bonus_luck;
 public:
     //constructor
-    Armour(const std::string& _name = "Basic Armour", const int _bonus_HP = 0, const int _bonus_MP = 0, const int _bonus_strength = 0, const int _bonus_dexterity = 0, const int _bonus_vitality = 0, const int _bonus_agility = 0, const int _bonus_luck = 0): Item(_name), bonus_HP(_bonus_HP), bonus_MP(_bonus_MP), bonus_strength(_bonus_strength), bonus_dexterity(_bonus_dexterity), bonus_vitality(_bonus_vitality), bonus_agility(_bonus_agility), bonus_luck(_bonus_luck) {}
+    Armour(const std::string& aname = "Basic Armour", const int abonus_HP = 0, const int abonus_MP = 0, const int abonus_strength = 0, const int abonus_dexterity = 0, const int abonus_vitality = 0, const int abonus_agility = 0, const int abonus_luck = 0): Item(aname), bonus_HP(abonus_HP), bonus_MP(abonus_MP), bonus_strength(abonus_strength), bonus_dexterity(abonus_dexterity), bonus_vitality(abonus_vitality), bonus_agility(abonus_agility), bonus_luck(abonus_luck) {}
     Item* clone() const override {return new Armour(*this);}
 
     //citire si afisare
@@ -17,12 +17,6 @@ public:
         in >> a.name >> a.bonus_HP >> a.bonus_MP >> a.bonus_strength >> a.bonus_dexterity >> a.bonus_vitality >> a.bonus_agility >> a.bonus_luck;
         return in;
     }
-
-    friend std::ostream& operator<<(std::ostream&, const Armour&);
-
-    void print(std::ostream&) const override;
-
-    int itemType()const override;
 
     //getters
     int get_bHP() const;
@@ -33,6 +27,10 @@ public:
     int get_bagi() const;
     int get_blck() const;
 
+    void useThis(Player&) override;
+
+private:
+    void print(std::ostream&) const override;
 };
 
 

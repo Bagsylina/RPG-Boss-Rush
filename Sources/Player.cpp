@@ -4,7 +4,7 @@ std::ostream& operator<<(std::ostream& out, const Player& e){
     e.afisBasicStats(out);
     out << "Strength: " << e.strength << " Dexterity: " << e.dexterity << " Vitality: " << e.vitality << " Agility: "<< e.agility << " Luck: " << e.luck << '\n';
     out << "Number of skills: " << e.skill_list.size() << '\n';
-    e.printSkills();
+    e.printSkills(out);
     for(int i = 0; i < 8; i++)
     {
         switch (e.weakness_chart[i]) {
@@ -20,14 +20,14 @@ std::ostream& operator<<(std::ostream& out, const Player& e){
     out << "Armour: " << e.armour << '\n';
     out << "Accessory: " << e.accessory << '\n';
     out << "Number of items in inventory: " << e.inventory.size() << '\n';
-    e.printItems();
+    e.printItems(out);
     return out;
 }
 
-void Player::printItems() const{ // prints the items in the players inventory
+void Player::printItems(std::ostream& where) const{ // prints the items in the players inventory
     int n = inventory.size();
     for(int i = 0; i < n; i++)
-        std::cout << i+1 <<": " << *inventory[i] << '\n';
+        where << i+1 <<": " << *inventory[i] << '\n';
 }
 
 //getters
@@ -39,9 +39,8 @@ Armour Player::getArmour() const {return armour;}
 
 void Player::spend_macca(int x){macca-=x;}
 
-void Player::newItem(Item* item){
-    Item* p = item->clone();
-    inventory.push_back(p);
+void Player::newItem(Item& item){
+    inventory.push_back(item.clone());
 } //get an item
 
 void Player::deleteItem(int i){
@@ -90,7 +89,7 @@ bool Player::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) /
             case 1: case 2: attack = (strength + dexterity) / 2; break; //pierce and projectile attacks use both strength and dexterity
             default: attack = dexterity; break; //all other attacks use only dexterity
         }
-        double dmg = s.get_damage() * attack * std::min((double)(1), (double)(1+(double)(level)/100)); //get the base damage of the move taking into account the attack stat and the level
+        double dmg = s.get_damage() * attack * std::min(1.0, (double)(1.0+(double)(level)/100)); //get the base damage of the move taking into account the attack stat and the level
         if(accessory.get_type() == type) //buff the damage if the type is buffed by the accessory
             dmg *= (1 + accessory.get_buff());
         srand(time(0));
@@ -130,63 +129,11 @@ bool Player::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) /
 
 
 //player using an item from inventory
-
 void Player::useItem(int i){
     Item* p = inventory[i];
-    int type = p->itemType();
-    switch(type){
-        case 1: useItemSkill(p); break;
-        case 2: useItemAccessory(p); break;
-        case 3: useItemArmour(p); break;
-        case 4: Consumable* c = dynamic_cast<Consumable*>(p); heal(c->get_HP_heal(), c->get_MP_heal()); break;
-    }
+    p->useThis(*this);
     deleteItem(i);
 };
-
-void Player::useItemSkill(Item *p){ //player equips a skill from inventory
-    Skill* s = dynamic_cast<Skill*>(p);
-    if(get_nr_skills() == 4) { //player needs to discard a skill if it has 4 already equipped
-        std::cout << "Choose a skill to forget:\n";
-        printSkills();
-        int action = 0;
-        std::cin >> action;
-        try {
-            if (action < 0 || action >= get_nr_skills())
-                throw InvalidInput();
-            Skill s1 = get_skill(action - 1);
-            Item *p1 = new Skill(s1);
-            newItem(p1);
-            delete p1;
-            forgetSkill(action - 1);
-        }
-        catch (InvalidInput &e) {
-            std::cout << e.what();
-            newItem(p);
-            std::cin.clear();
-            std::cin.ignore(256, '\n');
-        }
-    }
-    learnSkill(*s);
-}
-
-void Player::useItemAccessory(Item *p){ //player equips an accessory and puts the old one in inventory
-    Accessory* a = dynamic_cast<Accessory*>(p);
-    Accessory a1 = getAccessory();
-    Item *p1 = new Accessory(a1);
-    newItem(p1);
-    delete p1;
-    equip_accessory(*a);
-}
-
-void Player::useItemArmour(Item *p){ //player equips armour and puts the old one in inventory
-    Armour* a = dynamic_cast<Armour*>(p);
-    Armour a1 = getArmour();
-    Item *p1 = new Armour(a1);
-    newItem(p1);
-    delete p1;
-    equip_armour(*a);
-}
-
 
 void Player::LevelUp() {
     std::cout << "Choose a stat to raise:\n1: Strength\n2: Dexterity\n3: Vitality\n4: Agility\n5: Luck\n";

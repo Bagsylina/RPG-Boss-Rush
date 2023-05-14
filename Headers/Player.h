@@ -16,7 +16,7 @@ class Player : public Entity{
     std::vector <Item *> inventory;
 
 public:
-    Player(const std::string& name_ = "Player", const int _level = 1, const int HP_ = 130, const int MP_ = 50, const int _strength = 3, const int _dexterity = 3, const int _vitality = 3, const int _agility = 3, const int _luck = 3): Entity(name_, _level, HP_, MP_, _strength, _dexterity, _vitality, _agility, _luck)
+    Player(const std::string& pname = "Player", const int plevel = 1, const int pHP = 130, const int pMP = 50, const int pstrength = 3, const int pdexterity = 3, const int pvitality = 3, const int pagility = 3, const int pluck = 3): Entity(pname, plevel, pHP, pMP, pstrength, pdexterity, pvitality, pagility, pluck)
     {
         current_HP = HP;
         current_MP = MP;
@@ -31,7 +31,7 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream&, const Player&);
-    void printItems() const;
+    void printItems(std::ostream&) const;
 
     //getters
     int get_macca() const;
@@ -41,7 +41,7 @@ public:
 
     void spend_macca(int x);
 
-    void newItem(Item*);
+    void newItem(Item&);
     void deleteItem(int i);
 
     void equip_armour(const Armour&);
@@ -52,9 +52,6 @@ public:
     bool UseSkill(const Skill&, Entity&, const bool guard) override;
 
     void useItem(int);
-    void useItemSkill(Item*);
-    void useItemAccessory(Item*);
-    void useItemArmour(Item*);
 
     void LevelUp();
 };

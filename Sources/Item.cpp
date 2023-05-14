@@ -11,5 +11,3 @@ std::ostream& operator<<(std::ostream& out, const Item& i)
 void Item::print(std::ostream &where) const {
     where << name;
 }
-
-int Item::itemType() const{return 0;}

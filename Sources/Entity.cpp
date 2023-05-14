@@ -13,7 +13,7 @@ std::ostream& operator<<(std::ostream& out, const Entity& e)
     e.afisBasicStats(out);
     out << "Strength: " << e.strength << " Dexterity: " << e.dexterity << " Vitality: " << e.vitality << " Agility: "<< e.agility << " Luck: " << e.luck << '\n';
     out << "Number of skills: " << e.skill_list.size() << '\n';
-    e.printSkills();
+    e.printSkills(out);
     for(int i = 0; i < 8; i++)
     {
         switch (e.weakness_chart[i]) {
@@ -34,10 +34,10 @@ void Entity::afisBasicStats(std::ostream& where) const{
     where << "HP: " << current_HP << '/' << HP << " MP: "<< current_MP << '/' << MP << '\n';
 }
 
-void Entity::printSkills() const{
+void Entity::printSkills(std::ostream& where) const{
     int nr = skill_list.size();
     for(int i = 0; i < nr; i++)
-        std::cout << i + 1 << ": " <<  skill_list[i] << '\n';
+        where << i + 1 << ": " <<  skill_list[i] << '\n';
 }
 
 int Entity::get_level() const{return level;}
@@ -83,7 +83,7 @@ bool Entity::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) /
             case 1: case 2: attack = (strength + dexterity) / 2; break; //pierce and projectile attacks use both strength and dexterity
             default: attack = dexterity; break; //all other attacks use only dexterity
         }
-        double dmg = s.get_damage() * attack * std::min((double)(1), (double)(1+(double)(level)/100)); //get the base damage of the move taking into account the attack stat and the level
+        double dmg = s.get_damage() * attack * std::min(1.0, (double)(1+(double)(level)/100)); //get the base damage of the move taking into account the attack stat and the level
         srand(time(0));
         r = rand() % 1000; //generate a random number that determines if the skill is a critical hit
         hitr = s.get_critical_rate() * (luck / enemy.get_lck());

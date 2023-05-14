@@ -16,7 +16,7 @@ protected:
     static const std::vector <std::string> Types;
 
 public:
-    Entity(const std::string& name_ = "Demon", const int _level = 1, const int HP_ = 100, const int MP_ = 30, const int _strength = 3, const int _dexterity = 3, const int _vitality = 3, const int _agility = 3, const int _luck = 3): name(name_), level(_level), HP(HP_), MP(MP_), strength(_strength), dexterity(_dexterity), vitality(_vitality), agility(_agility), luck(_luck)
+    Entity(const std::string& ename = "Demon", const int elevel = 1, const int eHP = 100, const int eMP = 30, const int estrength = 3, const int edexterity = 3, const int evitality = 3, const int eagility = 3, const int eluck = 3): name(ename), level(elevel), HP(eHP), MP(eMP), strength(estrength), dexterity(edexterity), vitality(evitality), agility(eagility), luck(eluck)
     {
         current_HP = HP;
         current_MP = MP;
@@ -27,7 +27,7 @@ public:
     friend std::istream& operator>>(std::istream&, Entity&);
     friend std::ostream& operator<<(std::ostream&, const Entity&);
     void afisBasicStats(std::ostream&) const;
-    void printSkills() const;
+    void printSkills(std::ostream&) const;
 
     int get_level() const;
     int get_curHP() const;

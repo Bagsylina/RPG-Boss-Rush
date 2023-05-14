@@ -18,7 +18,7 @@ bool Battle::playerActionAttack(){
         int nr = player.get_nr_skills();
         if(nr == 0)
             throw NoSkills();
-        player.printSkills();
+        player.printSkills(std::cout);
         int action = 0;
         std::cin >> action; //choosing the skill
         if(action > nr || action < 1)
@@ -44,7 +44,7 @@ void Battle::playerActionItem(){
         int nr = player.get_nr_items();
         if (nr == 0)
             throw NoItems();
-        player.printItems();
+        player.printItems(std::cout);
         int action = 0;
         std::cin >> action; //choosing an item
         if(action < 1 || action > nr)

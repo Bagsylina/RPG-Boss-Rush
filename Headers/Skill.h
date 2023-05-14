@@ -10,9 +10,8 @@ class Skill: public Item{
     double hit_rate, critical_rate;
 
 public:
-
     // constructor
-    Skill(const std::string& _name = "", const int _type = 0, const int _base_damage = 0, const int _MP_cost = 0, const double _hit_rate = 1, const double _critical_rate = 0.01): Item(_name), type(_type), base_damage(_base_damage), MP_cost(_MP_cost), hit_rate(_hit_rate), critical_rate(_critical_rate){}
+    Skill(const std::string& sname = "", const int stype = 0, const int sbase_damage = 0, const int sMP_cost = 0, const double shit_rate = 1, const double scritical_rate = 0.01): Item(sname), type(stype), base_damage(sbase_damage), MP_cost(sMP_cost), hit_rate(shit_rate), critical_rate(scritical_rate){}
     Item* clone() const override {return new Skill(*this);}
 
     //constructor de copiere
@@ -24,14 +23,8 @@ public:
     //citire si afisare
     friend std::istream& operator>>(std::istream&, Skill&);
 
-    friend std::ostream& operator<<(std::ostream&, const Skill&);
-
-    void print(std::ostream&) const override;
-
     //operator de copiere
     Skill& operator = (const Skill&);
-
-    int itemType() const override;
 
     //geterts
     int get_type() const;
@@ -39,6 +32,11 @@ public:
     int get_MP_cost() const;
     double get_hit_rate() const;
     double get_critical_rate() const;
+
+    void useThis(Player&) override;
+
+private:
+    void print(std::ostream&) const override;
 };
 
 

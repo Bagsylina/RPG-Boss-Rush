@@ -34,7 +34,7 @@ void Game::buyShop(){
             if (player.get_level() < Shop[action - 1].get_min_level())
                 throw NoLevel();
             player.spend_macca(Shop[action - 1].get_cost());
-            player.newItem(Shop[action - 1].get_product());
+            player.newItem(*Shop[action - 1].get_product());
         }
         catch(InvalidInput& e){
             std::cout << e.what();
@@ -81,7 +81,7 @@ void Game::useItems(){
     while(action == 1)
     {
         std::cout << "0: Go back" << '\n';
-        player.printItems();
+        player.printItems(std::cout);
         try {
             std::cin >> action;
             if(action < 1 || action > player.get_nr_items())

@@ -1,4 +1,5 @@
 #include "../Headers/Accessory.h"
+#include "../Headers/Player.h"
 
 int Accessory::get_type() const{return type_buff;}
 double Accessory::get_buff() const{return buff_percentage;}
@@ -9,14 +10,12 @@ std::istream& operator>>(std::istream& in, Accessory& a)
     return in;
 }
 
-std::ostream& operator<<(std::ostream& out, const Accessory& a)
-{
-    a.print(out);
-    return out;
-}
-
 void Accessory::print(std::ostream& where) const {
     where << name << '\n' << Types[type_buff] << " buffed by " << 100 * buff_percentage << '%';
 }
 
-int Accessory::itemType() const {return 2;}
+void Accessory::useThis(Player& p){
+    Accessory a1 = p.getAccessory();
+    p.newItem(a1);
+    p.equip_accessory(*this);
+}

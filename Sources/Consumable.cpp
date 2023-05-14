@@ -1,15 +1,10 @@
 #include "../Headers/Consumable.h"
+#include "../Headers/Player.h"
 
 std::istream& operator>>(std::istream& in, Consumable& c)
 {
     in >> c.name >> c.HP_heal >> c.MP_heal;
     return in;
-}
-
-std::ostream& operator<<(std::ostream& out, const Consumable& c)
-{
-    c.print(out);
-    return out;
 }
 
 void Consumable::print(std::ostream& where) const{
@@ -22,8 +17,10 @@ void Consumable::print(std::ostream& where) const{
         where << HP_heal << " HP and " << MP_heal << " MP";
 }
 
-int Consumable::itemType() const {return 4;}
-
 //getters
 int Consumable::get_HP_heal() const{return HP_heal;}
 int Consumable::get_MP_heal() const{return MP_heal;}
+
+void Consumable::useThis(Player& p){
+    p.heal(get_HP_heal(), get_MP_heal());
+}

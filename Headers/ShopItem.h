@@ -7,7 +7,8 @@ class ShopItem{
     int cost, min_level;
 
 public:
-    explicit ShopItem(Item* _product, int _cost = 1, int _min_level = 1): product(_product), cost(_cost), min_level(_min_level) {}
+    explicit ShopItem(Item* sproduct, int scost = 1, int smin_level = 1): product(sproduct), cost(scost), min_level(smin_level) {}
+    //~ShopItem(){delete product;}
 
     //getters
     Item* get_product() const;

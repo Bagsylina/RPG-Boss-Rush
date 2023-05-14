@@ -10,7 +10,7 @@ class Battle{
     int macca_gained, xp_gained;
 
 public:
-    Battle(Player& _player, Entity& _enemy, int _macca_gained = 0, int _xp_gained = 0): player(_player), enemy(_enemy), macca_gained(_macca_gained), xp_gained(_xp_gained) {}
+    Battle(Player& bplayer, Entity& benemy, int bmacca_gained = 0, int bxp_gained = 0): player(bplayer), enemy(benemy), macca_gained(bmacca_gained), xp_gained(bxp_gained) {}
 
     bool playerAction(int);
     bool playerActionAttack();

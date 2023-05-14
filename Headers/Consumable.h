@@ -8,21 +8,20 @@ class Consumable : public Item{
     int HP_heal, MP_heal;
 public:
     //constructor
-    Consumable(const std::string& _name = "Food", const int _HP_heal = 0, const int _MP_heal = 0): Item(_name), HP_heal(_HP_heal), MP_heal(_MP_heal) {}
+    Consumable(const std::string& cname = "Food", const int cHP_heal = 0, const int cMP_heal = 0): Item(cname), HP_heal(cHP_heal), MP_heal(cMP_heal) {}
     Item* clone() const override {return new Consumable(*this);}
 
     //citire si afisare
     friend std::istream& operator>>(std::istream&, Consumable&);
 
-    friend std::ostream& operator<<(std::ostream&, const Consumable&);
-
-    void print(std::ostream&) const override;
-
-    int itemType() const override;
-
     //getters
     int get_HP_heal() const;
     int get_MP_heal() const;
+
+    void useThis(Player&) override;
+
+private:
+    void print(std::ostream&) const override;
 };
 
 
