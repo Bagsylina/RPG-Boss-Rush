@@ -26,9 +26,17 @@ bool Battle::playerActionAttack(){
         Skill s = player.get_skill(action - 1);
         if (player.get_curMP() >= s.get_MP_cost()) //using the skill if there is enough MP
             extraTurn = player.UseSkill(s, enemy, enemyGuard);
+        else
+            throw NoMP();
     }
     catch(NoSkills& e){
+        Skill s;
+        player.learnSkill(s);
         std::cout << e.what();
+    }
+    catch(NoMP& e){
+        std::cout << e.what();
+
     }
     catch(InvalidInput& e) {
         std::cout << e.what();
@@ -109,7 +117,6 @@ void Battle::battleTurnEnemy(){ //enemy turn
     }
     else
     {
-        srand(time(0));
         r = rand() % enemy.get_nr_skills(); //use random skill
         Skill s = enemy.get_skill(r);
         bool extraTurn = false;
@@ -120,7 +127,6 @@ void Battle::battleTurnEnemy(){ //enemy turn
             std::cout << "Enemy gets another turn!\n";
             player.afisBasicStats(std::cout);
             enemy.afisBasicStats(std::cout);
-            srand(time(0));
             r = rand() % 5; //random chance for fighting or guarding
             if(r == 4) {
                 std::cout << "Enemy guards.\n";

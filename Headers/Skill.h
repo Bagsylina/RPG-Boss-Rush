@@ -11,7 +11,12 @@ class Skill: public Item{
 
 public:
     // constructor
-    Skill(const std::string& sname = "", const int stype = 0, const int sbase_damage = 0, const int sMP_cost = 0, const double shit_rate = 1, const double scritical_rate = 0.01): Item(sname), type(stype), base_damage(sbase_damage), MP_cost(sMP_cost), hit_rate(shit_rate), critical_rate(scritical_rate){}
+    Skill(const std::string& sname = "", const int stype = 0, const int sbase_damage = 0, const int sMP_cost = 0, const double shit_rate = 1, const double scritical_rate = 0.01): Item(sname), type(stype), base_damage(sbase_damage), MP_cost(sMP_cost), hit_rate(shit_rate), critical_rate(scritical_rate){
+        if(type < 0 || type >= Types.size())
+            throw InvalidType();
+        if(base_damage <= 0 || MP_cost < 0 || hit_rate <= 0 || hit_rate > 1 || critical_rate < 0 || critical_rate > 1)
+            throw InvalidData();
+    }
     Item* clone() const override {return new Skill(*this);}
 
     //constructor de copiere

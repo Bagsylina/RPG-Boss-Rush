@@ -11,7 +11,12 @@ class Accessory : public Item{
 
 public:
     //constructor
-    Accessory(const std::string& aname = "Basic Ring", const int atype_buff = 0, const double abuff_percentage = 0): Item(aname), type_buff(atype_buff), buff_percentage(abuff_percentage){}
+    Accessory(const std::string& aname = "Basic Ring", const int atype_buff = 0, const double abuff_percentage = 0): Item(aname), type_buff(atype_buff), buff_percentage(abuff_percentage){
+        if(type_buff < 0 || type_buff >= Types.size())
+            throw InvalidType();
+        if(buff_percentage < 0 || buff_percentage > 1)
+            throw InvalidData();
+    }
     Item* clone() const override {return new Accessory(*this);}
 
     //citire si afisare

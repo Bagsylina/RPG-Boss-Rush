@@ -91,6 +91,8 @@ void Game::useItems(){
         }
         catch(InvalidInput& e){
             std::cout << e.what();
+            std::cin.clear();
+            std::cin.ignore(256, '\n');
         }
         std::cout << "Do you want to use an item?\n1: Yes 2: No\n";
         std::cin >> action;

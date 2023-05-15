@@ -18,6 +18,8 @@ protected:
 public:
     Entity(const std::string& ename = "Demon", const int elevel = 1, const int eHP = 100, const int eMP = 30, const int estrength = 3, const int edexterity = 3, const int evitality = 3, const int eagility = 3, const int eluck = 3): name(ename), level(elevel), HP(eHP), MP(eMP), strength(estrength), dexterity(edexterity), vitality(evitality), agility(eagility), luck(eluck)
     {
+        if(HP <= 0 || MP <= 0 || strength <= 0 || dexterity <= 0 || vitality <= 0 || agility <= 0 || luck <= 0)
+            throw InvalidData();
         current_HP = HP;
         current_MP = MP;
         for(int i = 0; i <= 7; i++)
