@@ -115,12 +115,12 @@ bool Battle::enemyActionAttack(){
             throw NoMP();
         extraTurn = enemy.UseSkill(s, player, playerGuard);
     }
-    catch(NoSkills& e){
+    catch(NoSkills&){
         Skill s;
         enemy.learnSkill(s);
         extraTurn = enemy.UseSkill(s, player, playerGuard);
     }
-    catch(NoMP& e){
+    catch(NoMP&){
         enemyActionGuard();
     }
     return extraTurn;
