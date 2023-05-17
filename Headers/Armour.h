@@ -8,7 +8,11 @@ class Armour : public Item{
     int bonus_HP, bonus_MP, bonus_strength, bonus_dexterity, bonus_vitality, bonus_agility, bonus_luck;
 public:
     //constructor
-    explicit Armour(const std::string& aname = "Basic Armour", const int abonus_HP = 0, const int abonus_MP = 0, const int abonus_strength = 0, const int abonus_dexterity = 0, const int abonus_vitality = 0, const int abonus_agility = 0, const int abonus_luck = 0): Item(aname), bonus_HP(abonus_HP), bonus_MP(abonus_MP), bonus_strength(abonus_strength), bonus_dexterity(abonus_dexterity), bonus_vitality(abonus_vitality), bonus_agility(abonus_agility), bonus_luck(abonus_luck) {}
+    explicit Armour(const std::string& aname = "Basic Armour", const int abonus_HP = 0, const int abonus_MP = 0, const int abonus_strength = 0, const int abonus_dexterity = 0, const int abonus_vitality = 0, const int abonus_agility = 0, const int abonus_luck = 0): Item(aname), bonus_HP(abonus_HP), bonus_MP(abonus_MP), bonus_strength(abonus_strength), bonus_dexterity(abonus_dexterity), bonus_vitality(abonus_vitality), bonus_agility(abonus_agility), bonus_luck(abonus_luck)
+    {
+        if(bonus_HP < 0 || bonus_MP < 0 || bonus_strength < 0 || bonus_dexterity < 0 || bonus_vitality < 0 || bonus_agility < 0 || bonus_luck < 0)
+            throw InvalidStats("armour");
+    }
     [[nodiscard]]Item* clone() const override {return new Armour(*this);}
 
     //citire si afisare

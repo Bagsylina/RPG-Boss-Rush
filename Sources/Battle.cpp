@@ -33,11 +33,11 @@ bool Battle::playerActionAttack(){
     catch(NoSkills& e){
         Skill s;
         player.learnSkill(s);
-        std::cout << e.what();
+        player.UseSkill(s, enemy, enemyGuard);
+        std::cout << e.what() << "Used Basic Attack.\n";
     }
     catch(NoMP& e){
         std::cout << e.what();
-
     }
     catch(InvalidInput& e) {
         std::cout << e.what();
@@ -52,7 +52,7 @@ void Battle::playerActionItem(){
     try {
         int nr = player.get_nr_items();
         if (nr == 0)
-            throw NoItems();
+            throw NoItems("inventory");
         player.printItems(std::cout);
         int action = 0;
         std::cin >> action; //choosing an item
@@ -76,71 +76,80 @@ void Battle::battleTurnPlayer(){ //player turn
     std::cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
     int action = 0;
     bool extraTurn = false;
-    try {
-        std::cin >> action; //choosing an action
-        if(action < 1 || action > 4)
-            throw InvalidInput();
-        extraTurn = playerAction(action);
-    }
-    catch(InvalidInput& e){
-        std::cout << e.what();
+    std::cin >> action; //choosing an action
+    if(action < 1 || action > 4)
+    {
+        std::cout<<"Invalid input\n";
         std::cin.clear();
         std::cin.ignore(256, '\n');
     }
+    else
+        extraTurn = playerAction(action);
     if(extraTurn && enemy.get_curHP()) //another action if the player got an extra turn
     {
         std::cout << "You get another turn!\n";
         player.afisBasicStats(std::cout);
         enemy.afisBasicStats(std::cout);
         std::cout << "Choose action\n" << "1: Attack\n" << "2: Guard\n" << "3: Item\n" << "4: Stats\n";
-        try {
-            std::cin >> action;
-            if(action < 1 || action > 4)
-                throw InvalidInput();
-            playerAction(action);
-        }
-        catch(InvalidInput& e){
-            std::cout << e.what();
+        std::cin >> action; //choosing an action
+        if(action < 1 || action > 4)
+        {
+            std::cout<<"Invalid input\n";
             std::cin.clear();
             std::cin.ignore(256, '\n');
         }
+        else
+            playerAction(action);
     }
+}
+
+bool Battle::enemyActionAttack(){
+    bool extraTurn = false;
+    int nr = enemy.get_nr_skills();
+    try {
+        if(nr == 0)
+            throw NoSkills();
+        int r = rand() % nr; //use random skill
+        Skill s = enemy.get_skill(r);
+        if(enemy.get_curMP() < s.get_MP_cost())
+            throw NoMP();
+        extraTurn = enemy.UseSkill(s, player, playerGuard);
+    }
+    catch(NoSkills& e){
+        Skill s;
+        enemy.learnSkill(s);
+        extraTurn = enemy.UseSkill(s, player, playerGuard);
+    }
+    catch(NoMP& e){
+        enemyActionGuard();
+    }
+    return extraTurn;
+}
+
+void Battle::enemyActionGuard(){
+    std::cout << "Enemy guards.\n";
+    enemyGuard = true;
+    enemy.guardHeal();
 }
 
 void Battle::battleTurnEnemy(){ //enemy turn
     enemyGuard = false;
     int r = rand() % 5; //random chance for fighting or guarding
-    if(r == 4) {
-        std::cout << "Enemy guards.\n";
-        enemyGuard = true;
-        enemy.guardHeal();
-    }
+    if(r == 4)
+        enemyActionGuard();
     else
     {
-        int nr = enemy.get_nr_skills();
-        r = rand() % nr; //use random skill
-        Skill s = enemy.get_skill(r);
-        bool extraTurn = false;
-        if(enemy.get_curMP() >= s.get_MP_cost())
-            extraTurn = enemy.UseSkill(s, player, playerGuard);
+        bool extraTurn = enemyActionAttack();
         if(extraTurn) //another action if the enemy got an extra turn
         {
             std::cout << "Enemy gets another turn!\n";
             player.afisBasicStats(std::cout);
             enemy.afisBasicStats(std::cout);
             r = rand() % 5; //random chance for fighting or guarding
-            if(r == 4) {
-                std::cout << "Enemy guards.\n";
-                enemyGuard = true;
-                enemy.guardHeal();
-            }
+            if(r == 4)
+                enemyActionGuard();
             else
-            {
-                r = rand() % nr; //use random skill
-                s = enemy.get_skill(r);
-                if(enemy.get_curMP() >= s.get_MP_cost())
-                    enemy.UseSkill(s, player, playerGuard);
-            }
+                enemyActionAttack();
         }
     }
 }

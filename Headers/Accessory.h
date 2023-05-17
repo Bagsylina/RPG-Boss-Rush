@@ -13,9 +13,9 @@ public:
     //constructor
     explicit Accessory(const std::string& aname = "Basic Ring", const int atype_buff = 0, const double abuff_percentage = 0): Item(aname), type_buff(atype_buff), buff_percentage(abuff_percentage){
         if(type_buff < 0 || type_buff >= (int)(Types.size()))
-            throw InvalidType();
+            throw InvalidType("accessory");
         if(buff_percentage < 0 || buff_percentage > 1)
-            throw InvalidData();
+            throw InvalidData("accessory");
     }
     [[nodiscard]]Item* clone() const override {return new Accessory(*this);}
 

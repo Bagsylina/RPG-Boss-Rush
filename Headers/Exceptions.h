@@ -2,49 +2,65 @@
 #define OOP_EXCEPTIONS_H
 
 #include <exception>
+#include <string>
 
-class NoThings: public std::exception{
-public:
-    [[nodiscard]]const char * what () const throw (){return "Not enough things.\n";}
+class GameError: public std::runtime_error{
+    using std::runtime_error::runtime_error;
 };
 
-class NoItems: public NoThings{
+class NoThings: public GameError {
 public:
-    [[nodiscard]]const char * what () const throw (){return "No items in inventory.\n";}
+    explicit NoThings(const std::string& err): GameError(err) {}
 };
 
-class NoSkills: public NoThings{
+class NoItems: public NoThings {
 public:
-    [[nodiscard]]const char * what () const throw (){return "No skills equipped.\n";}
+    explicit NoItems(const std::string& location): NoThings("No items in " + location + ".\n") {}
 };
 
-class NoMoney: public NoThings{
+class NoSkills: public NoThings {
 public:
-    [[nodiscard]]const char * what () const throw (){return "Not enough money.\n";}
+    explicit NoSkills(): NoThings("No skills equipped.\n") {}
 };
 
-class NoLevel: public NoThings{
+class NoMoney: public NoThings {
 public:
-    [[nodiscard]]const char * what () const throw (){return "Level too low.\n";}
+    explicit NoMoney(): NoThings("Not enough money.\n") {}
 };
 
-class NoMP: public NoThings{
+class NoLevel: public NoThings {
 public:
-    [[nodiscard]]const char * what () const throw (){return "MP too low.\n";}
+    explicit NoLevel(): NoThings("Level too low.\n") {}
 };
 
-class InvalidInput: public std::exception{
+class NoMP: public NoThings {
 public:
-    [[nodiscard]]const char * what () const throw (){return "Invalid input.\n";}
+    explicit NoMP(): NoThings("Not enough MP.\n") {}
 };
 
-class InvalidData: public std::exception{
+class InvalidInput: public GameError{
 public:
-    [[nodiscard]]const char * what () const throw(){return "Invalid data.\n";}
+    explicit InvalidInput(): GameError("Invalid input.\n") {}
+};
+
+class InvalidData: public GameError{
+public:
+    explicit InvalidData(const std::string& err): GameError(err) {}
 };
 
 class InvalidType: public InvalidData{
-    [[nodiscard]]const char * what () const throw(){return "Invalid type.\n";}
+public:
+    explicit InvalidType(const std::string& err): InvalidData("Invalid" + err + "type.\n") {}
+};
+
+class InvalidStats: public InvalidData{
+public:
+    explicit InvalidStats(const std::string& err): InvalidData("Invalid " + err + " stats.\n") {}
+};
+
+class InvalidHeal: public InvalidData{
+public:
+    explicit InvalidHeal(): InvalidData("Invalid healing stats.\n") {}
 };
 
 #endif //OOP_EXCEPTIONS_H

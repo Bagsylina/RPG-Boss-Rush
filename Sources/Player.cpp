@@ -102,7 +102,6 @@ bool Player::UseSkill(const Skill& s, Entity& enemy, const bool guard) //an enti
 {
     current_MP -= s.get_MP_cost(); //skill uses a certain amount of MP
     double hitr = s.get_hit_rate() * ((double)(agility) / (double)(enemy.get_agi())); //calculating the hit rate, taking agility into account
-    std::uniform_int_distribution dist(0, 999);
     int r = rand()%1000, type = s.get_type(), weak = enemy.get_weakness(type); //generate a random number that determines if the skill hits and get the type of the move and the enemies weakness to the type
     if(r >= hitr*1000 || weak == 2) //do nothing if move misses or the skill is nulled by the enemy
     {
@@ -166,31 +165,19 @@ void Player::LevelUp() {
     std::cout << "Choose a stat to raise:\n1: Strength\n2: Dexterity\n3: Vitality\n4: Agility\n5: Luck\n";
     int action = 0;
     std::cin >> action;
-    try{
-        if(action < 1 || action > 5)
-            throw InvalidInput();
-        switch(action) {
-            case 1: strength++; break;
-            case 2: dexterity++; break;
-            case 3: vitality++; break;
-            case 4: agility++; break;
-            case 5: luck++; break;
-            default: break;
-        }
-    }
-    catch(InvalidInput& e){
-        std::uniform_int_distribution dist(1, 5);
-        int r = rand()%5 + 1;
-        switch(r){
-            case 1: strength++; break;
-            case 2: dexterity++; break;
-            case 3: vitality++; break;
-            case 4: agility++; break;
-            case 5: luck++; break;
-            default: break;
-        }
-        std::cout << e.what();
+    if(action < 1 || action > 5)
+    {
+        std::cout << "Invalid input. Random stat added.\n";
         std::cin.clear();
         std::cin.ignore(256,'\n');
+        action = rand() % 5 + 1;
+    }
+    switch(action) {
+        case 1: strength++; break;
+        case 2: dexterity++; break;
+        case 3: vitality++; break;
+        case 4: agility++; break;
+        case 5: luck++; break;
+        default: break;
     }
 }
