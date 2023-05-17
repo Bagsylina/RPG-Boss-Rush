@@ -19,9 +19,9 @@ public:
     ShopItem& operator = (const ShopItem&);
 
     //getters
-    Item* get_product() const;
-    int get_cost() const;
-    int get_min_level() const;
+    [[nodiscard]]Item* get_product() const;
+    [[nodiscard]]int get_cost() const;
+    [[nodiscard]]int get_min_level() const;
 };
 
 

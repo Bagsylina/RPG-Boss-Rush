@@ -1,6 +1,5 @@
 #include "../Headers/Skill.h"
 #include "../Headers/Player.h"
-#include "../Headers/Exceptions.h"
 
 //citire si afisare
 std::istream& operator>>(std::istream& in, Skill& s)

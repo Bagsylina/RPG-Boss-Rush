@@ -52,14 +52,14 @@ std::ostream& operator<<(std::ostream& out, const Player& e){
 }
 
 void Player::printItems(std::ostream& where) const{ // prints the items in the players inventory
-    int n = inventory.size();
+    int n = (int)(inventory.size());
     for(int i = 0; i < n; i++)
         where << i+1 <<": " << *inventory[i] << '\n';
 }
 
 //getters
 int Player::get_macca() const{return macca;}
-int Player::get_nr_items() const{return inventory.size();}
+int Player::get_nr_items() const{return (int)(inventory.size());}
 Accessory Player::getAccessory() const{return accessory;}
 Armour Player::getArmour() const {return armour;}
 
@@ -98,12 +98,12 @@ void Player::battle_rewards(const int macca_gained, const int xp_gained){ //play
     }
 }
 
-bool Player::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) //an entity uses a certain skill on another entity that may or may not be guarding
+bool Player::UseSkill(const Skill& s, Entity& enemy, const bool guard) //an entity uses a certain skill on another entity that may or may not be guarding
 {
     current_MP -= s.get_MP_cost(); //skill uses a certain amount of MP
-    double hitr = s.get_hit_rate() * (agility / enemy.get_agi()); //calculating the hir rate, taking agility into account
-    srand(time(0));
-    int r = rand() % 1000, type = s.get_type(), weak = enemy.get_weakness(type); //generate a random number that determines if the skill hits and get the type of the move and the enemies weakness to the type
+    double hitr = s.get_hit_rate() * ((double)(agility) / (double)(enemy.get_agi())); //calculating the hit rate, taking agility into account
+    std::uniform_int_distribution dist(0, 999);
+    int r = rand()%1000, type = s.get_type(), weak = enemy.get_weakness(type); //generate a random number that determines if the skill hits and get the type of the move and the enemies weakness to the type
     if(r >= hitr*1000 || weak == 2) //do nothing if move misses or the skill is nulled by the enemy
     {
         std::cout<<"Missed!\n";
@@ -119,8 +119,8 @@ bool Player::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) /
         double dmg = s.get_damage() * attack * std::min(1.0, (double)(1.0+(double)(level)/100)); //get the base damage of the move taking into account the attack stat and the level
         if(accessory.get_type() == type) //buff the damage if the type is buffed by the accessory
             dmg *= (1 + accessory.get_buff());
-        r = rand() % 1000; //generate a random number that determines if the skill is a critical hit
-        hitr = s.get_critical_rate() * (luck / enemy.get_lck());
+        r = rand()%1000; //generate a random number that determines if the skill is a critical hit
+        hitr = s.get_critical_rate() * ((double)(luck) / (double)(enemy.get_lck()));
         bool extraTurn = false; //entity gets an extra turn if the enemy is weak to the skill
         if(guard) //decrease damage if enemy is guarding
             dmg *= 0.3;
@@ -133,10 +133,11 @@ bool Player::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) /
             case -1: dmg *= 1.2; extraTurn = true; break; //increase damage if enemy is weak to the skill
             case 1: dmg *= 0.8; break; //heal instead of do damage if enemy absorbs the skill
             case 4: dmg = -0.5; extraTurn = false; break; //do damage to the enemy if it doesn't reflect the skill
+            default: break;
         }
         if(weak != 3) { //do damage to the enemy if it doesn't reflect the skill
             dmg /= enemy.get_vit();
-            enemy.takedamage(dmg);
+            enemy.takedamage((int)(dmg));
         }
         else{ //do damage to the entity that uses the skill if the enemy reflets the type of the skill
             extraTurn = false;
@@ -147,7 +148,7 @@ bool Player::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) /
                 case 2: case 3: dmg = 0; break;
                 case 4: dmg *= -0.5; break;
             }
-            takedamage(dmg);
+            takedamage((int)(dmg));
         }
         return extraTurn; //returns if the entity gets a extra turn or not after using the skill
     }
@@ -159,7 +160,7 @@ void Player::useItem(int i){
     Item* p = inventory[i];
     p->useThis(*this);
     deleteItem(i);
-};
+}
 
 void Player::LevelUp() {
     std::cout << "Choose a stat to raise:\n1: Strength\n2: Dexterity\n3: Vitality\n4: Agility\n5: Luck\n";
@@ -174,17 +175,19 @@ void Player::LevelUp() {
             case 3: vitality++; break;
             case 4: agility++; break;
             case 5: luck++; break;
+            default: break;
         }
     }
     catch(InvalidInput& e){
-        srand(time(0));
-        int r = rand() % 5 + 1;
+        std::uniform_int_distribution dist(1, 5);
+        int r = rand()%5 + 1;
         switch(r){
             case 1: strength++; break;
             case 2: dexterity++; break;
             case 3: vitality++; break;
             case 4: agility++; break;
             case 5: luck++; break;
+            default: break;
         }
         std::cout << e.what();
         std::cin.clear();

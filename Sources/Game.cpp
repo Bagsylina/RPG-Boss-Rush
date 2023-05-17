@@ -1,7 +1,7 @@
 #include "../Headers/Game.h"
 
 void Game::addBattle(Entity &enemy, int macca_gained, int xp_gained){Battle b(player, enemy, macca_gained, xp_gained); battle_list.push_back(b);}
-void Game::addShop(ShopItem s){Shop.push_back(s);}
+void Game::addShop(const ShopItem& s){Shop.push_back(s);}
 
 void Game::buyShop(){
     int action = 0;
@@ -20,7 +20,7 @@ void Game::buyShop(){
     }
     while(action == 1)
     {
-        int n = Shop.size();
+        int n = (int)(Shop.size());
         std::cout << "0: Go back" << '\n';
         for(int i = 0; i < n; i++)
             if(Shop[i].get_min_level() <= player.get_level())
@@ -111,7 +111,7 @@ void Game::useItems(){
 }
 
 void Game::playGame(){
-    int n = battle_list.size();
+    int n = (int)(battle_list.size());
     for(int i = 0; i < n && player.get_curHP() > 0; i++)
     {
         buyShop();

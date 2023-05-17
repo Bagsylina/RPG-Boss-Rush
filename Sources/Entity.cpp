@@ -35,7 +35,7 @@ void Entity::afisBasicStats(std::ostream& where) const{
 }
 
 void Entity::printSkills(std::ostream& where) const{
-    int nr = skill_list.size();
+    int nr = (int)(skill_list.size());
     for(int i = 0; i < nr; i++)
         where << i + 1 << ": " <<  skill_list[i] << '\n';
 }
@@ -47,7 +47,7 @@ int Entity::get_vit() const{return vitality;}
 int Entity::get_agi() const{return agility;}
 int Entity::get_lck() const{return luck;}
 int Entity::get_weakness(const int type) const{return weakness_chart[type];}
-int Entity::get_nr_skills() const{return skill_list.size();}
+int Entity::get_nr_skills() const{return (int)(skill_list.size());}
 Skill Entity::get_skill(const int i) const{return skill_list[i];}
 
 
@@ -65,11 +65,10 @@ void Entity::learnSkill(const Skill& s) {skill_list.push_back(s);} //learn a new
 
 void Entity::forgetSkill(const int i){skill_list.erase(skill_list.begin()+i);} //erase a skill
 
-bool Entity::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) //an entity uses a certain skill on another entity that may or may not be guarding
+bool Entity::UseSkill(const Skill& s, Entity& enemy, const bool guard) //an entity uses a certain skill on another entity that may or may not be guarding
 {
     current_MP -= s.get_MP_cost(); //skill uses a certain amount of MP
-    double hitr = s.get_hit_rate() * (agility / enemy.get_agi()); //calculating the hir rate, taking agility into account
-    srand(time(0));
+    double hitr = s.get_hit_rate() * ((double)(agility) / (double)(enemy.get_agi())); //calculating the hir rate, taking agility into account
     int r = rand() % 1000, type = s.get_type(), weak = enemy.get_weakness(type); //generate a random number that determines if the skill hits and get the type of the move and the enemies weakness to the type
     if(r >= hitr*1000 || weak == 2) //do nothing if move misses or the skill is nulled by the enemy
     {
@@ -84,9 +83,8 @@ bool Entity::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) /
             default: attack = dexterity; break; //all other attacks use only dexterity
         }
         double dmg = s.get_damage() * attack * std::min(1.0, (double)(1+(double)(level)/100)); //get the base damage of the move taking into account the attack stat and the level
-        srand(time(0));
         r = rand() % 1000; //generate a random number that determines if the skill is a critical hit
-        hitr = s.get_critical_rate() * (luck / enemy.get_lck());
+        hitr = s.get_critical_rate() * ((double)(luck) / (double)(enemy.get_lck()));
         bool extraTurn = false; //entity gets an extra turn if the enemy is weak to the skill
         if(guard) //decrease damage if enemy is guarding
             dmg *= 0.3;
@@ -99,10 +97,11 @@ bool Entity::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) /
             case -1: dmg *= 1.2; extraTurn = true; break; //increase damage if enemy is weak to the skill
             case 1: dmg *= 0.8; break; //heal instead of do damage if enemy absorbs the skill
             case 4: dmg = -0.5; extraTurn = false; break; //do damage to the enemy if it doesn't reflect the skill
+            default: break;
         }
         if(weak != 3) { //do damage to the enemy if it doesn't reflect the skill
             dmg /= enemy.get_vit();
-            enemy.takedamage(dmg);
+            enemy.takedamage((int)(dmg));
         }
         else{ //do damage to the entity that uses the skill if the enemy reflets the type of the skill
             extraTurn = false;
@@ -113,7 +112,7 @@ bool Entity::UseSkill(const Skill& s, Entity& enemy, const bool guard = false) /
                 case 2: case 3: dmg = 0; break;
                 case 4: dmg *= -0.5; break;
             }
-            takedamage(dmg);
+            takedamage((int)(dmg));
         }
         return extraTurn;//returns if the entity gets a extra turn or not after using the skill
     }

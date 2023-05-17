@@ -14,7 +14,7 @@ public:
     explicit Game(Player& gplayer): player(gplayer) {}
 
     void addBattle(Entity&, int, int);
-    void addShop(ShopItem);
+    void addShop(const ShopItem&);
 
     void buyShop();
     void useItems();

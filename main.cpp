@@ -1,6 +1,7 @@
 #include "Headers/Game.h"
 
 int main() {
+    srand(time(nullptr));
     Player player("Bagsylina", 5, 172, 121, 5, 5, 5, 5, 5);
     Entity pixie("Pixie", 3, 100, 100, 4, 7, 3, 6, 4);
     Entity drunk("Drunk", 4, 210, 50, 7, 1, 2, 1, 7);

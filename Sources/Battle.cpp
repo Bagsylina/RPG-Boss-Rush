@@ -7,6 +7,7 @@ bool Battle::playerAction(int action){ //player action
         case 2: playerGuard = true; player.guardHeal(); break; //guarding
         case 3: playerActionItem(); break; //using an item
         case 4: std::cout << player << '\n' << enemy << '\n'; extraTurn = true; break; //showing the full stats of the player and enemy and getting an extra turn
+        default: break;
     }
     return extraTurn; //returns true if the player got an extra turn after his action
 }
@@ -108,7 +109,6 @@ void Battle::battleTurnPlayer(){ //player turn
 
 void Battle::battleTurnEnemy(){ //enemy turn
     enemyGuard = false;
-    srand(time(0));
     int r = rand() % 5; //random chance for fighting or guarding
     if(r == 4) {
         std::cout << "Enemy guards.\n";
@@ -117,7 +117,8 @@ void Battle::battleTurnEnemy(){ //enemy turn
     }
     else
     {
-        r = rand() % enemy.get_nr_skills(); //use random skill
+        int nr = enemy.get_nr_skills();
+        r = rand() % nr; //use random skill
         Skill s = enemy.get_skill(r);
         bool extraTurn = false;
         if(enemy.get_curMP() >= s.get_MP_cost())
@@ -135,7 +136,7 @@ void Battle::battleTurnEnemy(){ //enemy turn
             }
             else
             {
-                r = rand() % enemy.get_nr_skills(); //use random skill
+                r = rand() % nr; //use random skill
                 s = enemy.get_skill(r);
                 if(enemy.get_curMP() >= s.get_MP_cost())
                     enemy.UseSkill(s, player, playerGuard);

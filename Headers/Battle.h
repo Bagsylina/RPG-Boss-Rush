@@ -1,6 +1,7 @@
 #ifndef OOP_BATTLE_H
 #define OOP_BATTLE_H
 #include <iostream>
+#include <random>
 #include "Player.h"
 
 class Battle{

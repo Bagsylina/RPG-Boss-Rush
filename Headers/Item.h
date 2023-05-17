@@ -12,9 +12,9 @@ protected:
     std::string name;
     static const std::vector <std::string> Types;
 public:
-    Item(const std::string& iname = ""): name(iname){}
+    explicit Item(std::string iname = ""): name{std::move(iname)} {}
     virtual ~Item() = default;
-    virtual Item* clone() const = 0;
+    [[nodiscard]]virtual Item* clone() const = 0;
 
     friend std::ostream& operator<<(std::ostream&, const Item&);
 

@@ -16,7 +16,7 @@ class Player : public Entity{
     std::vector <Item *> inventory;
 
 public:
-    Player(const std::string& pname = "Player", const int plevel = 1, const int pHP = 130, const int pMP = 50, const int pstrength = 3, const int pdexterity = 3, const int pvitality = 3, const int pagility = 3, const int pluck = 3): Entity(pname, plevel, pHP, pMP, pstrength, pdexterity, pvitality, pagility, pluck)
+    explicit Player(const std::string& pname = "Player", const int plevel = 1, const int pHP = 130, const int pMP = 50, const int pstrength = 3, const int pdexterity = 3, const int pvitality = 3, const int pagility = 3, const int pluck = 3): Entity(pname, plevel, pHP, pMP, pstrength, pdexterity, pvitality, pagility, pluck)
     {
         current_HP = HP;
         current_MP = MP;
@@ -50,10 +50,10 @@ public:
     void printItems(std::ostream&) const;
 
     //getters
-    int get_macca() const;
-    int get_nr_items() const;
-    Accessory getAccessory() const;
-    Armour getArmour() const;
+    [[nodiscard]]int get_macca() const;
+    [[nodiscard]]int get_nr_items() const;
+    [[nodiscard]]Accessory getAccessory() const;
+    [[nodiscard]]Armour getArmour() const;
 
     void spend_macca(int x);
 
@@ -63,9 +63,9 @@ public:
     void equip_armour(const Armour&);
     void equip_accessory(const Accessory&); //equip accessory
 
-    void battle_rewards(const int, const int);
+    void battle_rewards(int, int);
 
-    bool UseSkill(const Skill&, Entity&, const bool guard) override;
+    bool UseSkill(const Skill&, Entity&, bool) override;
 
     void useItem(int);
 
