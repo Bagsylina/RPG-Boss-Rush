@@ -40,6 +40,12 @@ void Entity::printSkills(std::ostream& where) const{
         where << i + 1 << ": " <<  skill_list[i] << '\n';
 }
 
+void Entity::printTypes(std::ostream& where) {
+    int nr = (int)(Types.size());
+    for(int i = 0; i < nr; i++)
+        where << i + 1 << ": " << Types[i] << '\n';
+}
+
 int Entity::get_level() const{return level;}
 int Entity::get_curHP() const{return current_HP;}
 int Entity::get_curMP() const{return current_MP;}

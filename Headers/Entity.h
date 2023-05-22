@@ -31,6 +31,7 @@ public:
     friend std::ostream& operator<<(std::ostream&, const Entity&);
     void afisBasicStats(std::ostream&) const;
     void printSkills(std::ostream&) const;
+    static void printTypes(std::ostream&);
 
     [[nodiscard]]int get_level() const;
     [[nodiscard]]int get_curHP() const;

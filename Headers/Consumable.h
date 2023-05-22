@@ -9,7 +9,7 @@ class Consumable : public Item{
 public:
     //constructor
     explicit Consumable(const std::string& cname = "Food", const int cHP_heal = 0, const int cMP_heal = 0): Item(cname), HP_heal(cHP_heal), MP_heal(cMP_heal) {
-        if(HP_heal < 0 || MP_heal < 0)
+        if(HP_heal < 0 || MP_heal < 0 || HP_heal + MP_heal <= 0)
             throw InvalidHeal();
     }
     [[nodiscard]]Item* clone() const override {return new Consumable(*this);}
