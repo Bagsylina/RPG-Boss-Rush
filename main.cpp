@@ -55,6 +55,7 @@ int main() {
             std::cout << "Dynamic cast failed!";
         else
             std::cout << "Dynamic cast was successful.";
+        delete dc;
     }
     catch(GameError& e)
     {
