@@ -13,6 +13,7 @@ int main() {
         Armour shirt("Tshirt", 10, 5, 0, 1, 0, 1, 0);
         Consumable burger("Burger", 100, 10), energy("Energy drink", 0, 120), pizza("Pizza", 300, 50), bandage(
                 "Bandage", 60, 0);
+        ArmourUpgrade undershirt("Undershirt", 1, 1, 1);
         player.equip_accessory(battery);
         player.equip_armour(shirt);
         player.newItem(burger);
@@ -22,6 +23,7 @@ int main() {
         player.newItem(bandage);
         player.newItem(bandage);
         player.newItem(bandage);
+        player.newItem(undershirt);
         player.learnSkill(punch);
         player.learnSkill(knife);
         player.learnSkill(gun);

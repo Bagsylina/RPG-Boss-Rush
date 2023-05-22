@@ -7,6 +7,7 @@
 #include "Accessory.h"
 #include "Armour.h"
 #include "Consumable.h"
+#include "ArmourUpgrade.h"
 #include "Exceptions.h"
 
 class Player : public Entity{
