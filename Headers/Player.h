@@ -17,33 +17,11 @@ class Player : public Entity{
     std::vector <Item *> inventory;
 
 public:
-    explicit Player(const std::string& pname = "Player", const int plevel = 1, const int pHP = 130, const int pMP = 50, const int pstrength = 3, const int pdexterity = 3, const int pvitality = 3, const int pagility = 3, const int pluck = 3): Entity(pname, plevel, pHP, pMP, pstrength, pdexterity, pvitality, pagility, pluck)
-    {
-        current_HP = HP;
-        current_MP = MP;
-        for(int i = 0; i <= 7; i++)
-            weakness_chart[i] = 0;
-        xp = 0;
-        macca = 0;
-    }
+    explicit Player(const std::string& pname = "Player", int plevel = 1, int pHP = 130, int pMP = 50, int pstrength = 3, int pdexterity = 3, int pvitality = 3, int pagility = 3, int pluck = 3);
 
-    Player(const Player& other): Entity(other.name, other.level, other.HP, other.MP, other.strength, other.dexterity, other.vitality, other.agility, other.luck){
-        current_HP = other.current_HP;
-        current_MP = other.current_MP;
-        for(int i = 0; i <= 7; i++)
-            weakness_chart[i] = 0;
-        xp = other.xp;
-        macca = other.macca;
-        for(auto& i: other.inventory)
-            newItem(*i);
-    }
+    Player(const Player& other);
 
-    ~Player(){
-        for(auto& i: inventory)
-            delete i;
-        while(!inventory.empty())
-            inventory.pop_back();
-    }
+    ~Player();
 
     Player& operator = (const Player&);
 

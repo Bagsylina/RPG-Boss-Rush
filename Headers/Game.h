@@ -11,7 +11,7 @@ class Game{
     std::vector <ShopItem> Shop;
 
 public:
-    explicit Game(Player& gplayer): player(gplayer) {}
+    explicit Game(Player& gplayer);
 
     void addBattle(Entity&, int, int);
     void addShop(const ShopItem&);

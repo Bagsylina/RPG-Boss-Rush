@@ -7,12 +7,8 @@ class ArmourUpgrade: public Item{
     int upg_strength, upg_dexterity, upg_vitality, upg_agility, upg_luck;
 
 public:
-    explicit ArmourUpgrade(const std::string& aname = "Basic Upgrade", const int astr = 0, const int adex = 0, const int avit = 0, const int aagi = 0, const int alck = 0): Item(aname), upg_strength(astr), upg_dexterity(adex), upg_vitality(avit), upg_agility(aagi), upg_luck(alck)
-    {
-        if(upg_strength < 0 || upg_dexterity < 0 || upg_vitality < 0 || upg_agility < 0 || upg_luck < 0)
-            throw InvalidStats("armour upgrade");
-    }
-    [[nodiscard]]Item* clone() const override {return new ArmourUpgrade(*this);}
+    explicit ArmourUpgrade(const std::string& aname = "Basic Upgrade", int astr = 0, int adex = 0, int avit = 0, int aagi = 0, int alck = 0);
+    [[nodiscard]]Item* clone() const override;
 
     friend std::istream& operator>>(std::istream&, ArmourUpgrade&);
 

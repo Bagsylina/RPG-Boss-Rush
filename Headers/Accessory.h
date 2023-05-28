@@ -11,13 +11,8 @@ class Accessory : public Item{
 
 public:
     //constructor
-    explicit Accessory(const std::string& aname = "Basic Ring", const int atype_buff = 0, const double abuff_percentage = 0): Item(aname), type_buff(atype_buff), buff_percentage(abuff_percentage){
-        if(type_buff < 0 || type_buff >= (int)(Types.size()))
-            throw InvalidType("accessory");
-        if(buff_percentage < 0 || buff_percentage > 1)
-            throw InvalidData("accessory");
-    }
-    [[nodiscard]]Item* clone() const override {return new Accessory(*this);}
+    explicit Accessory(const std::string& aname = "Basic Ring", int atype_buff = 0, double abuff_percentage = 0);
+    [[nodiscard]]Item* clone() const override;
 
     //citire si afisare
     friend std::istream& operator>>(std::istream&, Accessory&);

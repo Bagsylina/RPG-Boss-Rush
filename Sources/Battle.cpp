@@ -1,5 +1,10 @@
 #include "../Headers/Battle.h"
 
+Battle::Battle(Player &bplayer, Entity &benemy, const int bmacca_gained, const int bxp_gained) : player(bplayer), enemy(benemy), macca_gained(bmacca_gained), xp_gained(bxp_gained) {
+    if(macca_gained < 0 || xp_gained < 0)
+        throw InvalidData("Invalid battle data.\n");
+}
+
 bool Battle::playerAction(int action){ //player action
     bool extraTurn = false;
     switch(action){

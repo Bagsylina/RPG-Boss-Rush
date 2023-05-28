@@ -40,7 +40,7 @@ int main() {
         drunk.changeWeakness(5, 3);
         Entity::printTypes(std::cout);
         Game g(player);
-        g.addBattle(pixie, 100, 200);
+        g.addBattle(pixie, 100, 1000);
         g.addBattle(drunk, 10, 570);
         Skill sharp_knife("Sharp Knife", 1, 60, 8, 0.98, 0.4);
         Item *p1 = &sharp_knife, *p2 = &bandage, *p3 = &battery, *p4 = &shirt;

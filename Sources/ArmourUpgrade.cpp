@@ -1,6 +1,15 @@
 #include "../Headers/ArmourUpgrade.h"
 #include "../Headers/Player.h"
 
+ArmourUpgrade::ArmourUpgrade(const std::string &aname, const int astr, const int adex, const int avit, const int aagi,
+                             const int alck) : Item(aname), upg_strength(astr), upg_dexterity(adex), upg_vitality(avit), upg_agility(aagi), upg_luck(alck)
+{
+    if(upg_strength < 0 || upg_dexterity < 0 || upg_vitality < 0 || upg_agility < 0 || upg_luck < 0)
+        throw InvalidStats("armour upgrade");
+}
+
+Item *ArmourUpgrade::clone() const {return new ArmourUpgrade(*this);}
+
 std::istream& operator>>(std::istream& in, ArmourUpgrade& au)
 {
     in >> au.name >> au.upg_strength >> au.upg_dexterity >> au.upg_vitality >> au.upg_agility >> au.upg_luck;

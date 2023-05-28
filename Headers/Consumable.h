@@ -8,11 +8,8 @@ class Consumable : public Item{
     int HP_heal, MP_heal;
 public:
     //constructor
-    explicit Consumable(const std::string& cname = "Food", const int cHP_heal = 0, const int cMP_heal = 0): Item(cname), HP_heal(cHP_heal), MP_heal(cMP_heal) {
-        if(HP_heal < 0 || MP_heal < 0 || HP_heal + MP_heal <= 0)
-            throw InvalidHeal();
-    }
-    [[nodiscard]]Item* clone() const override {return new Consumable(*this);}
+    explicit Consumable(const std::string& cname = "Food", int cHP_heal = 0, int cMP_heal = 0);
+    [[nodiscard]]Item* clone() const override;
 
     //citire si afisare
     friend std::istream& operator>>(std::istream&, Consumable&);

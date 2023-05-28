@@ -2,6 +2,17 @@
 
 const std::vector <std::string> Entity::Types = {"Physical", "Pierce", "Projectile", "Fire", "Water", "Electricity", "Earth", "Wind"};
 
+Entity::Entity(std::string ename, const int elevel, const int eHP, const int eMP, const int estrength,
+               const int edexterity, const int evitality, const int eagility, const int eluck) : name{std::move(ename)}, level(elevel), HP(eHP), MP(eMP), strength(estrength), dexterity(edexterity), vitality(evitality), agility(eagility), luck(eluck)
+{
+    if(HP <= 0 || MP <= 0 || strength <= 0 || dexterity <= 0 || vitality <= 0 || agility <= 0 || luck <= 0)
+        throw InvalidStats("entity");
+    current_HP = HP;
+    current_MP = MP;
+    for(int i = 0; i <= 7; i++)
+        weakness_chart[i] = 0;
+}
+
 std::istream& operator>>(std::istream& in, Entity& e)
 {
     in >> e.name >> e.level >> e.HP >> e.MP >> e.strength >> e.dexterity >> e.vitality >> e.agility >> e.luck;

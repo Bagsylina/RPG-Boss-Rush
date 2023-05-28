@@ -11,19 +11,11 @@ class Skill: public Item{
 
 public:
     // constructor
-    explicit Skill(const std::string& sname = "", const int stype = 0, const int sbase_damage = 10, const int sMP_cost = 0, const double shit_rate = 1, const double scritical_rate = 0.01): Item(sname), type(stype), base_damage(sbase_damage), MP_cost(sMP_cost), hit_rate(shit_rate), critical_rate(scritical_rate){
-        if(type < 0 || type >= (int)(Types.size()))
-            throw InvalidType("skill");
-        if(base_damage <= 0 || MP_cost < 0 || hit_rate <= 0 || hit_rate > 1 || critical_rate < 0 || critical_rate > 1)
-            throw InvalidStats("skill");
-    }
-    [[nodiscard]]Item* clone() const override {return new Skill(*this);}
+    explicit Skill(const std::string& sname = "", int stype = 0, int sbase_damage = 10, int sMP_cost = 0, double shit_rate = 1, double scritical_rate = 0.01);
+    [[nodiscard]]Item* clone() const override;
 
     //constructor de copiere
-    Skill(const Skill & other): Item(other.name), type(other.type), base_damage(other.base_damage), MP_cost(other.MP_cost), hit_rate(other.hit_rate), critical_rate(other.critical_rate){}
-
-    //destructor
-    virtual ~Skill() {}
+    Skill(const Skill & other);
 
     //citire si afisare
     friend std::istream& operator>>(std::istream&, Skill&);

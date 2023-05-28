@@ -1,6 +1,20 @@
 #include "../Headers/Armour.h"
 #include "../Headers/Player.h"
 
+Armour::Armour(const std::string &aname, const int abonus_HP, const int abonus_MP, const int abonus_strength,
+               const int abonus_dexterity, const int abonus_vitality, const int abonus_agility, const int abonus_luck) : Item(aname), bonus_HP(abonus_HP), bonus_MP(abonus_MP), bonus_strength(abonus_strength), bonus_dexterity(abonus_dexterity), bonus_vitality(abonus_vitality), bonus_agility(abonus_agility), bonus_luck(abonus_luck)
+{
+    if(bonus_HP < 0 || bonus_MP < 0 || bonus_strength < 0 || bonus_dexterity < 0 || bonus_vitality < 0 || bonus_agility < 0 || bonus_luck < 0)
+        throw InvalidStats("armour");
+}
+
+Item *Armour::clone() const {return new Armour(*this);}
+
+std::istream &operator>>(std::istream &in, Armour &a) {
+    in >> a.name >> a.bonus_HP >> a.bonus_MP >> a.bonus_strength >> a.bonus_dexterity >> a.bonus_vitality >> a.bonus_agility >> a.bonus_luck;
+    return in;
+}
+
 void Armour::print(std::ostream& where) const{
     where << name;
     if(bonus_HP)

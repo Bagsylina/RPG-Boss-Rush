@@ -12,7 +12,7 @@ protected:
     std::string name;
     static const std::vector <std::string> Types;
 public:
-    explicit Item(std::string iname = ""): name{std::move(iname)} {}
+    explicit Item(std::string iname = "");
     virtual ~Item() = default;
     [[nodiscard]]virtual Item* clone() const = 0;
 

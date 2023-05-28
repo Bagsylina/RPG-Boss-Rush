@@ -1,6 +1,13 @@
 #include "../Headers/Consumable.h"
 #include "../Headers/Player.h"
 
+Consumable::Consumable(const std::string &cname, const int cHP_heal, const int cMP_heal) : Item(cname), HP_heal(cHP_heal), MP_heal(cMP_heal) {
+    if(HP_heal < 0 || MP_heal < 0 || HP_heal + MP_heal <= 0)
+        throw InvalidHeal();
+}
+
+Item *Consumable::clone() const {return new Consumable(*this);}
+
 std::istream& operator>>(std::istream& in, Consumable& c)
 {
     in >> c.name >> c.HP_heal >> c.MP_heal;

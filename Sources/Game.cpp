@@ -1,5 +1,7 @@
 #include "../Headers/Game.h"
 
+Game::Game(Player &gplayer) : player(gplayer) {}
+
 void Game::addBattle(Entity &enemy, int macca_gained, int xp_gained){Battle b(player, enemy, macca_gained, xp_gained); battle_list.push_back(b);}
 void Game::addShop(const ShopItem& s){Shop.push_back(s);}
 
@@ -16,6 +18,7 @@ void Game::buyShop(){
     while(action == 1)
     {
         try{
+            std::cout << "Macca: " << player.get_macca() << '\n';
             int n = (int)(Shop.size());
             if(n == 0)
                 throw NoItems("shop");

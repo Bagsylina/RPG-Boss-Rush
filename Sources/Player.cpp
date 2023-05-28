@@ -1,5 +1,34 @@
 #include "../Headers/Player.h"
 
+Player::Player(const std::string &pname, const int plevel, const int pHP, const int pMP, const int pstrength,
+               const int pdexterity, const int pvitality, const int pagility, const int pluck) : Entity(pname, plevel, pHP, pMP, pstrength, pdexterity, pvitality, pagility, pluck)
+{
+    current_HP = HP;
+    current_MP = MP;
+    for(int i = 0; i <= 7; i++)
+        weakness_chart[i] = 0;
+    xp = 0;
+    macca = 0;
+}
+
+Player::Player(const Player &other) : Entity(other.name, other.level, other.HP, other.MP, other.strength, other.dexterity, other.vitality, other.agility, other.luck){
+    current_HP = other.current_HP;
+    current_MP = other.current_MP;
+    for(int i = 0; i <= 7; i++)
+        weakness_chart[i] = 0;
+    xp = other.xp;
+    macca = other.macca;
+    for(auto& i: other.inventory)
+        newItem(*i);
+}
+
+Player::~Player() {
+    for(auto& i: inventory)
+        delete i;
+    while(!inventory.empty())
+        inventory.pop_back();
+}
+
 Player& Player::operator = (const Player& other){
     if(this != &other) {
         name = other.name;
@@ -90,7 +119,7 @@ void Player::equip_accessory(const Accessory& a){accessory = a;} //equip accesso
 void Player::battle_rewards(const int macca_gained, const int xp_gained){ //player gains macca, xp and level after winning a battle
     macca += macca_gained;
     xp += xp_gained;
-    while(xp > 1000)
+    while(xp >= 1000)
     {
         xp -= 1000;
         level++;
