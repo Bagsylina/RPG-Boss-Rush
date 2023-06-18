@@ -8,13 +8,13 @@
 class Game{
     Player& player;
     std::vector <Battle> battle_list;
-    std::vector <ShopItem> Shop;
+    std::vector <ShopItem1<Item>> Shop;
 
 public:
     explicit Game(Player& gplayer);
 
     void addBattle(Entity&, int, int);
-    void addShop(const ShopItem&);
+    void addShop(const ShopItem1<Item>&);
 
     void buyShop();
     void useItems();

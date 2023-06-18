@@ -3,7 +3,7 @@
 Game::Game(Player &gplayer) : player(gplayer) {}
 
 void Game::addBattle(Entity &enemy, int macca_gained, int xp_gained){Battle b(player, enemy, macca_gained, xp_gained); battle_list.push_back(b);}
-void Game::addShop(const ShopItem& s){Shop.push_back(s);}
+void Game::addShop(const ShopItem1<Item>& s){Shop.push_back(s);}
 
 void Game::buyShop(){
     int action = 0;

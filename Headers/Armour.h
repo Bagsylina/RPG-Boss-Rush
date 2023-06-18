@@ -6,6 +6,7 @@
 
 class Armour : public Item{
     int bonus_HP, bonus_MP, bonus_strength, bonus_dexterity, bonus_vitality, bonus_agility, bonus_luck;
+    friend class Armour_Builder;
 public:
     //constructor
     explicit Armour(const std::string& aname = "Basic Armour", int abonus_HP = 0, int abonus_MP = 0, int abonus_strength = 0, int abonus_dexterity = 0, int abonus_vitality = 0, int abonus_agility = 0, int abonus_luck = 0);
@@ -27,6 +28,48 @@ public:
 
 private:
     void print(std::ostream&) const override;
+};
+
+class Armour_Builder{
+private:
+    Armour a;
+public:
+    Armour_Builder() = default;
+    Armour_Builder& name(const std::string& name){
+        a.name = name;
+        return *this;
+    }
+    Armour_Builder& bonus_HP(int x){
+        a.bonus_HP = x;
+        return *this;
+    }
+    Armour_Builder& bonus_MP(int x){
+        a.bonus_MP = x;
+        return *this;
+    }
+    Armour_Builder& bonus_strength(int x){
+        a.bonus_strength = x;
+        return *this;
+    }
+    Armour_Builder& bonus_dexterity(int x){
+        a.bonus_dexterity = x;
+        return *this;
+    }
+    Armour_Builder& bonus_vitality(int x){
+        a.bonus_vitality = x;
+        return *this;
+    }
+    Armour_Builder& bonus_agility(int x){
+        a.bonus_agility = x;
+        return *this;
+    }
+    Armour_Builder& bonus_luck(int x) {
+        a.bonus_luck = x;
+        return *this;
+    }
+    Armour build(){
+        return a;
+    }
 };
 
 

@@ -10,7 +10,8 @@ int main() {
         Skill gun("Gun", 2, 40, 30, 0.8, 0.1), taser("Taser", 5, 30, 20, 0.95, 0.05);
         Skill agi("Agi", 3, 20, 8, 1, 0.05), zan("Zan", 7, 20, 8, 1, 0.05);
         Accessory battery("Battery", 5, 0.2);
-        Armour shirt("Tshirt", 10, 5, 0, 1, 0, 1, 0);
+        Armour_Builder ab;
+        Armour shirt = ab.name("Tshirt").bonus_HP(10).bonus_MP(5).bonus_dexterity(1).bonus_agility(1).build();
         Consumable burger("Burger", 100, 10), energy("Energy drink", 0, 120), pizza("Pizza", 300, 50), bandage(
                 "Bandage", 60, 0);
         ArmourUpgrade undershirt("Undershirt", 1, 1, 1);
@@ -44,7 +45,7 @@ int main() {
         g.addBattle(drunk, 10, 570);
         Skill sharp_knife("Sharp Knife", 1, 60, 8, 0.98, 0.4);
         Item *p1 = &sharp_knife, *p2 = &bandage, *p3 = &battery, *p4 = &shirt;
-        ShopItem s1(p1, 30, 4), s2(p2, 10, 1), s3(p3, 0, 1), s4(p4, 0, 1);
+        ShopItem1<Item> s1(p1, 30, 4), s2(p2, 10, 1), s3(p3, 0, 1), s4(p4, 0, 1);
         g.addShop(s1);
         g.addShop(s2);
         g.addShop(s3);
