@@ -6,20 +6,22 @@
 #include "Battle.h"
 
 class Game{
-    Player& player;
+    Player player;
     std::vector <Battle> battle_list;
-    std::vector <ShopItem1<Item>> Shop;
+    std::vector <ShopItem<Item>> Shop;
 
 public:
-    explicit Game(Player& gplayer);
+    explicit Game();
 
     void addBattle(Entity&, int, int);
-    void addShop(const ShopItem1<Item>&);
+    void addShop(const ShopItem<Item>&);
 
     void buyShop();
     void useItems();
 
     void playGame();
+
+    Player& get_player();
 };
 
 
