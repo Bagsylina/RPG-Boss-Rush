@@ -17,6 +17,11 @@ Game::Game(){
     }
 }
 
+Game::~Game(){
+    level_rewards.clear();
+    Shop.clear();
+}
+
 void Game::addBattle(Entity &enemy, int macca_gained, int xp_gained){Battle b(player, enemy, macca_gained, xp_gained); battle_list.push_back(b);}
 void Game::addShop(const ShopItem<Item>& s){Shop.push_back(s);}
 void Game::addReward(const ShopItem<Skill>& s) {level_rewards.push_back(s);}

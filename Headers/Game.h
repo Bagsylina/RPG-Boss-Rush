@@ -13,6 +13,7 @@ class Game{
 
 public:
     explicit Game();
+    ~Game();
 
     void addBattle(Entity&, int, int);
     void addShop(const ShopItem<Item>&);
