@@ -43,12 +43,15 @@ int main() {
         g.addBattle(pixie, 100, 1000);
         g.addBattle(drunk, 10, 570);
         Skill sharp_knife("Sharp Knife", 1, 60, 8, 0.98, 0.4);
+        Skill *sk = &sharp_knife;
         Item *p1 = &sharp_knife, *p2 = &bandage, *p3 = &battery, *p4 = &shirt;
         ShopItem<Item> s1(p1, 30, 4), s2(p2, 10, 1), s3(p3, 0, 1), s4(p4, 0, 1);
         g.addShop(s1);
         g.addShop(s2);
         g.addShop(s3);
         g.addShop(s4);
+        ShopItem<Skill> s5(sk, 0, 5);
+        g.addReward(s5);
         g.playGame();
         drunk.forgetSkill(0);
         Item* dc = burger.clone();

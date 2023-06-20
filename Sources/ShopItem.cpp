@@ -4,7 +4,9 @@ template <typename T>
 ShopItem<T>::ShopItem(T* sproduct, const int scost, const int smin_level) : cost(scost), min_level(smin_level){
     if(cost < 0 || min_level < 0)
         throw InvalidData("Invalid shop item data.\n");
-    product = sproduct->clone();
+    product = dynamic_cast<T*>(sproduct->clone());
+    if(product == NULL)
+        throw InvalidInput();
 }
 
 template <typename T>
@@ -14,7 +16,9 @@ template <typename T>
 ShopItem<T>& ShopItem<T>::operator = (const ShopItem<T>& other){
     if(this != &other) {
         delete product;
-        product = other.product->clone();
+        product = dynamic_cast<T*>(other.product->clone());
+        if(product == NULL)
+            throw InvalidInput();
         cost = other.cost;
         min_level = other.min_level;
     }
@@ -31,3 +35,4 @@ template <typename T>
 int ShopItem<T>::get_min_level() const{return min_level;}
 
 template class ShopItem<Item>;
+template class ShopItem<Skill>;

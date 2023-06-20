@@ -9,12 +9,14 @@ class Game{
     Player player;
     std::vector <Battle> battle_list;
     std::vector <ShopItem<Item>> Shop;
+    std::vector <ShopItem<Skill>> level_rewards;
 
 public:
     explicit Game();
 
     void addBattle(Entity&, int, int);
     void addShop(const ShopItem<Item>&);
+    void addReward(const ShopItem<Skill>&);
 
     void buyShop();
     void useItems();

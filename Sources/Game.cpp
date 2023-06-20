@@ -19,6 +19,7 @@ Game::Game(){
 
 void Game::addBattle(Entity &enemy, int macca_gained, int xp_gained){Battle b(player, enemy, macca_gained, xp_gained); battle_list.push_back(b);}
 void Game::addShop(const ShopItem<Item>& s){Shop.push_back(s);}
+void Game::addReward(const ShopItem<Skill>& s) {level_rewards.push_back(s);}
 
 void Game::buyShop(){
     int action = 0;
@@ -127,6 +128,20 @@ void Game::playGame(){
         buyShop();
         useItems();
         battle_list[i].battle();
+        int m = (int)(level_rewards.size()), nr = 0;
+        for(int j = 0; j < m; j++)
+            if(level_rewards[j].get_min_level() <= player.get_level())
+            {
+                player.newItem(*level_rewards[j].get_product());
+                nr++;
+                level_rewards.erase(level_rewards.begin()+j);
+                j--;
+                m--;
+            }
+        if(nr == 1)
+            std::cout << "Gained a new skill.\n";
+        if(nr > 1)
+            std::cout << "Gained new " << nr << " skills\n";
     }
 }
 
